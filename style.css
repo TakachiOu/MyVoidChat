@@ -91,3 +91,26 @@ header { padding: 20px 8%; }
     background-color: #e74c3c; /* اللون الأحمر عند مرور الماوس */
     transform: scale(1.05); /* تكبير بسيط للزر ليعطي إحساساً أفضل */
 }
+/* --- Custom Scrollbar Styling --- */
+/* هذا الكود يستهدف شريط التمرير في حاوية العرض الرئيسية */
+#main-view::-webkit-scrollbar {
+    width: 10px; /* عرض شريط التمرير */
+}
+
+/* تصميم خلفية الشريط (المسار) */
+#main-view::-webkit-scrollbar-track {
+    background: var(--primary-color); /* لون داكن متناسق */
+    border-radius: 5px;
+}
+
+/* تصميم المقبض الذي يتم سحبه */
+#main-view::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color); /* بنفسجي مميز */
+    border-radius: 5px;
+    border: 2px solid var(--primary-color); /* إضافة حد داخلي جميل */
+}
+
+/* تغيير لون المقبض عند مرور الماوس فوقه */
+#main-view::-webkit-scrollbar-thumb:hover {
+    background-color: #a166ff; /* بنفسجي أفتح قليلاً */
+}
