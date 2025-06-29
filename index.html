@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoidChat - تحدث مع المجهول</title>
+    <title data-key="siteTitle">VoidChat - تحدث مع المجهول</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,19 +20,22 @@
 
     <header>
         <div class="logo">Void<span>Chat</span></div>
+        <nav>
+            <button id="lang-toggle" class="lang-toggle-btn" data-key="langToggle">English</button>
+        </nav>
     </header>
 
     <div id="main-view">
         <main class="container">
             <section class="hero">
-                <h1 class="main-title">ادخل الفراغ و تحدث مع المجهول</h1>
-                <p class="subtitle">شارك اهتماماتك وتحدث مع شخص يشاركك نفس الشغف، ثم اختفِ دون أثر.</p>
+                <h1 class="main-title" data-key="mainTitle">ادخل الفراغ و تحدث مع المجهول</h1>
+                <p class="subtitle" data-key="subtitle">شارك اهتماماتك وتحدث مع شخص يشاركك نفس الشغف، ثم اختفِ دون أثر.</p>
                 <div class="tags-input-container">
                     <div id="tags-area" class="tags-area"></div>
-                    <input type="text" id="tags-input" placeholder="اكتب tag للدخول إلى دردشة مع من كتب نفس الـtag">
+                    <input type="text" id="tags-input" data-key="tagsPlaceholder" placeholder="اكتب tag للدخول إلى دردشة مع من كتب نفس الـtag">
                 </div>
                 <button class="cta-button">
-                    <span>ابحث عن شخص</span>
+                    <span data-key="ctaButton">ابحث عن شخص</span>
                     <i class="fa-solid fa-angles-right"></i>
                 </button>
             </section>
@@ -40,53 +43,52 @@
             <section class="features-rules-section">
                 <div class="text-content-container">
                     <div class="content-block">
-                        <h2>ما هو VoidChat؟</h2>
-                        <p>هي منصة بسيطة ومساحة آمنة تتيح لك فرصة الدخول في محادثات نصية، عشوائية، ومجهولة الهوية تماماً مع غرباء يشاركونك نفس الاهتمامات.</p>
+                        <h2 data-key="aboutTitle">ما هو VoidChat؟</h2>
+                        <p data-key="aboutText">هي منصة بسيطة ومساحة آمنة تتيح لك فرصة الدخول في محادثات نصية، عشوائية، ومجهولة الهوية تماماً مع غرباء يشاركونك نفس الاهتمامات.</p>
                     </div>
                     <div class="content-block">
-                        <h2>أبرز مميزاتنا</h2>
+                        <h2 data-key="featuresTitle">أبرز مميزاتنا</h2>
                         <ul class="features-list">
-                            <li><strong>هوية مجهولة بالكامل:</strong> لا نطلب أي معلومات شخصية.</li>
-                            <li><strong>محادثات مؤقتة:</strong> كل الرسائل تُحذف للأبد بمجرد إنهاء المحادثة.</li>
-                            <li><strong>مطابقة ذكية:</strong> استعمل tag إن أحببت، وإن لم تجد أحدًا، غيّره أو ادخل بدون tag.</li>
+                            <li data-key="feature1"><strong>هوية مجهولة بالكامل:</strong> لا نطلب أي معلومات شخصية.</li>
+                            <li data-key="feature2"><strong>محادثات مؤقتة:</strong> كل الرسائل تُحذف للأبد بمجرد إنهاء المحادثة.</li>
+                            <li data-key="feature3"><strong>مطابقة ذكية:</strong> استعمل tag إن أحببت، وإن لم تجد أحدًا، غيّره أو ادخل بدون tag.</li>
                         </ul>
                     </div>
                     <div class="content-block">
-                        <h2>قواعد المنصة</h2>
+                        <h2 data-key="rulesTitle">قواعد المنصة</h2>
                         <ul class="rules-list">
-                            <li>التحلي بالاحترام المتبادل وتجنب أي لغة مسيئة.</li>
-                            <li>كل شيئ مسموح في الكلام و المسؤول لا يتحمل مسؤولية أين كان.</li>
-                            <li>استمتع بتجربتك وكن سبباً في جعل تجربة الآخرين ممتعة.</li>
+                            <li data-key="rule1">التحلي بالاحترام المتبادل وتجنب أي لغة مسيئة.</li>
+                            <li data-key="rule2">كل شيئ مسموح في الكلام و المسؤول لا يتحمل مسؤولية أين كان.</li>
+                            <li data-key="rule3">استمتع بتجربتك وكن سبباً في جعل تجربة الآخرين ممتعة.</li>
                         </ul>
                     </div>
                 </div>
             </section>
         </main>
         
-<footer class="site-footer">
-    <div class="suggestion-box">
-        <h3>لديك اقتراح لتحسين الموقع؟</h3>
-        <p>نحن نستمع لآرائكم. شاركنا أفكارك لمساعدتنا على التطور.</p>
-        <textarea id="suggestion-textarea" rows="3" placeholder="اكتب اقتراحك هنا..."></textarea>
-        <button id="submit-suggestion-btn">إرسال الاقتراح</button>
-        <p id="suggestion-thanks" class="hidden">شكراً لك! تم إرسال اقتراحك بنجاح.</p>
-    </div>
-
-    <div class="footer-bottom">
-        <p class="footer-copyright">© 2025 VoidChat. جميع الحقوق محفوظة.</p>
-        <p class="footer-credit">صُنع بكل ❤️ بواسطة <a href="https://github.com/TakachiOu" target="_blank" class="credit-link">Takachi-Ou</a></p>
-    </div>
-</footer>
+        <footer class="site-footer">
+            <div class="suggestion-box">
+                <h3 data-key="suggestionTitle">لديك اقتراح لتحسين الموقع؟</h3>
+                <p data-key="suggestionText">نحن نستمع لآرائكم. شاركنا أفكارك لمساعدتنا على التطور.</p>
+                <textarea id="suggestion-textarea" rows="3" data-key="suggestionPlaceholder" placeholder="اكتب اقتراحك هنا..."></textarea>
+                <button id="submit-suggestion-btn" data-key="suggestionBtn">إرسال الاقتراح</button>
+                <p id="suggestion-thanks" class="hidden" data-key="suggestionThanks">شكراً لك! تم إرسال اقتراحك بنجاح.</p>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright" data-key="copyright">© 2025 VoidChat. جميع الحقوق محفوظة.</p>
+                <p class="footer-credit" data-key="credit">صُنع بكل ❤️ بواسطة <a href="https://github.com/TakachiOu" target="_blank" class="credit-link">Takachi-Ou</a></p>
+            </div>
+        </footer>
     </div>
 
     <div id="chat-view" class="hidden">
         <div class="chat-container">
-            <p class="chat-status"></p>
+            <p class="chat-status" data-key-status></p>
             <div class="messages-area"></div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input-field" placeholder="اكتب رسالتك..." disabled>
+                <input type="text" id="chat-input-field" data-key="chatPlaceholder" placeholder="اكتب رسالتك..." disabled>
                 <button id="leave-button" title="إنهاء المحادثة" disabled><i class="fa-solid fa-right-from-bracket"></i></button>
-                <button id="send-button" disabled>إرسال</button>
+                <button id="send-button" data-key="chatSendBtn" disabled>إرسال</button>
             </div>
         </div>
     </div>
