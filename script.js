@@ -148,4 +148,22 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('chatMessage', (message) => {
         displayMessage(message, 'stranger-message');
     });
+// --- Suggestion Box Logic ---
+const suggestionTextarea = document.getElementById('suggestion-textarea');
+const submitSuggestionBtn = document.getElementById('submit-suggestion-btn');
+const suggestionThanksMsg = document.getElementById('suggestion-thanks');
+
+submitSuggestionBtn.addEventListener('click', () => {
+    const suggestion = suggestionTextarea.value.trim();
+    if (suggestion) {
+        // أرسل الاقتراح إلى الخادم
+        socket.emit('submitSuggestion', suggestion);
+
+        // أظهر رسالة الشكر وأخفِ الصندوق والزر
+        suggestionTextarea.value = '';
+        suggestionTextarea.style.display = 'none';
+        submitSuggestionBtn.style.display = 'none';
+        suggestionThanksMsg.classList.remove('hidden');
+    }
+});
 });

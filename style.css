@@ -114,3 +114,73 @@ header { padding: 20px 8%; }
 #main-view::-webkit-scrollbar-thumb:hover {
     background-color: #a166ff; /* بنفسجي أفتح قليلاً */
 }
+/* --- Suggestion Box Styling --- */
+.suggestion-box {
+    max-width: 600px;
+    margin: 0 auto 40px auto; /* توسيط الصندوق مع مسافة سفلية */
+    padding: 30px;
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    text-align: center;
+}
+
+.suggestion-box h3 {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.suggestion-box p {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.suggestion-box textarea {
+    width: 100%;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-color);
+    padding: 15px;
+    font-size: 1rem;
+    font-family: 'Tajawal', sans-serif;
+    resize: vertical; /* السماح للمستخدم بتكبير الصندوق عمودياً فقط */
+    margin-bottom: 15px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.suggestion-box textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+#submit-suggestion-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#submit-suggestion-btn:hover {
+    background-color: #a166ff;
+}
+
+#suggestion-thanks {
+    color: #2ecc71; /* لون أخضر للنجاح */
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 40px;
+}

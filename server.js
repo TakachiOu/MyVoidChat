@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const { Server } = require("socket.io");
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
@@ -43,6 +44,25 @@ io.on('connection', (socket) => {
             console.log(`[-] No partner for ${socket.id}. Added to queue.`);
         }
     });
+    // أضف هذا الجزء الجديد داخل io.on('connection', ...)
+    socket.on('submitSuggestion', (suggestion) => {
+    // تنظيف النص قليلاً
+    const sanitizedSuggestion = suggestion.replace(/\s+/g, ' ').trim();
+
+    if (sanitizedSuggestion) {
+        const timestamp = new Date().toISOString();
+        const formattedSuggestion = `[${timestamp}] - ${sanitizedSuggestion}\n-----------------\n`;
+
+        // إضافة الاقتراح إلى نهاية ملف اسمه suggestions.txt
+        fs.appendFile('suggestions.txt', formattedSuggestion, (err) => {
+            if (err) {
+                console.error('Failed to save suggestion:', err);
+            } else {
+                console.log(`[+] New suggestion received and saved: "${sanitizedSuggestion}"`);
+            }
+        });
+    }
+});
 
     socket.on('chatMessage', (data) => {
         socket.to(data.room).emit('chatMessage', data.message);
