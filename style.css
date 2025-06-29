@@ -1,0 +1,93 @@
+/* --- General Setup & Variables --- */
+:root {
+    --bg-color: #0d0f18;
+    --primary-color: #1b1e2f;
+    --accent-color: #8a42ff;
+    --text-color: #e0e0e0;
+    --text-muted: #818896;
+    --glass-bg: rgba(27, 30, 47, 0.5);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* **جديد:** هذا هو التصحيح المهم */
+html, body {
+    height: 100%;
+    overflow: hidden; /* يمنع ظهور شريط تمرير غير مرغوب فيه للصفحة كلها */
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+/* --- Background & Header --- */
+.background-blurs { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
+.blur-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; animation-duration: 20s; animation-iteration-count: infinite; animation-direction: alternate; }
+#orb1 { width: 400px; height: 400px; background: #471a8a; top: 10%; left: 15%; animation-name: moveOrb1; }
+#orb2 { width: 300px; height: 300px; background: var(--accent-color); bottom: 5%; right: 10%; animation-name: moveOrb2; }
+@keyframes moveOrb1 { from { transform: translate(0, 0); } to { transform: translate(100px, 50px); } }
+@keyframes moveOrb2 { from { transform: translate(0, 0); } to { transform: translate(-80px, -60px); } }
+header { padding: 20px 8%; }
+.logo { font-size: 1.8rem; font-weight: 700; }
+.logo span { color: var(--accent-color); }
+
+/* --- Main View Content --- */
+#main-view { overflow-y: auto; height: 100%; }
+.container { padding: 0 8%; }
+.hero { text-align: center; padding: 80px 0; }
+.main-title { font-size: 3.5rem; }
+.subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 20px auto 40px; }
+.tags-input-container { background-color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; max-width: 500px; margin: 0 auto 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.tags-area { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-item { background-color: var(--accent-color); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; }
+#tags-input { background: none; border: none; outline: none; color: var(--text-color); font-size: 1rem; flex-grow: 1; min-width: 200px; }
+.cta-button { display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: white; background: var(--accent-color); padding: 20px 45px; border: none; border-radius: 15px; gap: 12px; cursor: pointer; transition: transform 0.2s ease; }
+.cta-button:hover:not(:disabled) { transform: translateY(-3px); }
+
+/* --- Text-Based Content Section Styling --- */
+.features-rules-section { padding: 60px 0 80px 0; }
+.text-content-container { max-width: 800px; margin: 0 auto; }
+.content-block { margin-bottom: 50px; }
+.content-block:last-child { margin-bottom: 0; }
+.content-block h2 { font-size: 2.2rem; color: white; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--accent-color); }
+.content-block p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; }
+.features-list, .rules-list { list-style: none; padding-right: 0; }
+.features-list li, .rules-list li { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; padding-right: 35px; position: relative; }
+.features-list li::before { content: '✨'; color: var(--accent-color); position: absolute; right: 0; top: 5px; }
+.rules-list li::before { content: '»'; color: var(--accent-color); font-weight: bold; font-size: 1.5rem; position: absolute; right: 0; top: -2px; }
+.features-list li strong { color: var(--text-color); }
+
+/* --- Footer Styling --- */
+.site-footer { text-align: center; padding: 40px 20px; margin-top: 60px; color: var(--text-muted); border-top: 1px solid var(--border-color); }
+.footer-credit { margin-top: 8px; }
+.credit-link { color: var(--accent-color); text-decoration: none; font-weight: bold; }
+.credit-link:hover { text-decoration: underline; }
+
+/* --- Chat View & Bubbles Styling --- */
+.hidden { display: none !important; }
+#chat-view { display: flex; flex-direction: column; height: 100%; width: 100%; position: fixed; top: 0; left: 0; background-color: var(--bg-color); z-index: 10; }
+.chat-container { display: flex; flex-direction: column; width: 100%; max-width: 900px; height: 100%; margin: 0 auto; }
+.chat-status { flex-shrink: 0; padding: 15px; text-align: center; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+.messages-area { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.chat-input-area { flex-shrink: 0; display: flex; gap: 10px; padding: 15px 20px; border-top: 1px solid var(--border-color); background-color: var(--primary-color); }
+.chat-input-area input { flex-grow: 1; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); padding: 15px; font-size: 1.1rem; }
+.chat-input-area button { background: var(--accent-color); border: none; color: white; font-weight: bold; border-radius: 10px; padding: 0 30px; cursor: pointer; }
+.chat-input-area button:disabled { background-color: #3a3f51; cursor: not-allowed; }
+.message-bubble { padding: 12px 18px; border-radius: 20px; max-width: 75%; line-height: 1.5; word-wrap: break-word; }
+.my-message { background-color: var(--accent-color); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
+.stranger-message { background-color: #3a3f51; align-self: flex-start; border-bottom-left-radius: 5px; }
+.system-message { text-align: center; color: var(--text-muted); font-style: italic; font-size: 0.9rem; align-self: center; }
+/* --- Leave Button Specific Styling --- */
+#leave-button {
+    padding: 0 20px;
+    background-color: #4a5166; /* لون رمادي داكن مختلف عن زر الإرسال */
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#leave-button:hover:not(:disabled) {
+    background-color: #e74c3c; /* اللون الأحمر عند مرور الماوس */
+    transform: scale(1.05); /* تكبير بسيط للزر ليعطي إحساساً أفضل */
+}

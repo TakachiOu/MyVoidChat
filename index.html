@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoidChat - تحدث مع المجهول</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-blurs">
+        <div class="blur-orb" id="orb1"></div>
+        <div class="blur-orb" id="orb2"></div>
+    </div>
+
+    <header>
+        <div class="logo">Void<span>Chat</span></div>
+    </header>
+
+    <div id="main-view">
+        <main class="container">
+            <section class="hero">
+                <h1 class="main-title">ادخل الفراغ و تحدث مع المجهول</h1>
+                <p class="subtitle">شارك اهتماماتك وتحدث مع شخص يشاركك نفس الشغف، ثم اختفِ دون أثر.</p>
+                <div class="tags-input-container">
+                    <div id="tags-area" class="tags-area"></div>
+                    <input type="text" id="tags-input" placeholder="اكتب tag للدخول إلى دردشة مع من كتب نفس الـtag">
+                </div>
+                <button class="cta-button">
+                    <span>ابحث عن شخص</span>
+                    <i class="fa-solid fa-angles-right"></i>
+                </button>
+            </section>
+
+            <section class="features-rules-section">
+                <div class="text-content-container">
+                    <div class="content-block">
+                        <h2>ما هو VoidChat؟</h2>
+                        <p>هي منصة بسيطة ومساحة آمنة تتيح لك فرصة الدخول في محادثات نصية، عشوائية، ومجهولة الهوية تماماً مع غرباء يشاركونك نفس الاهتمامات.</p>
+                    </div>
+                    <div class="content-block">
+                        <h2>أبرز مميزاتنا</h2>
+                        <ul class="features-list">
+                            <li><strong>هوية مجهولة بالكامل:</strong> لا نطلب أي معلومات شخصية.</li>
+                            <li><strong>محادثات مؤقتة:</strong> كل الرسائل تُحذف للأبد بمجرد إنهاء المحادثة.</li>
+                            <li><strong>مطابقة ذكية:</strong> استعمل tag إن أحببت، وإن لم تجد أحدًا، غيّره أو ادخل بدون tag.</li>
+                        </ul>
+                    </div>
+                    <div class="content-block">
+                        <h2>قواعد المنصة</h2>
+                        <ul class="rules-list">
+                            <li>التحلي بالاحترام المتبادل وتجنب أي لغة مسيئة.</li>
+                            <li>كل شيئ مسموح في الكلام و المسؤول لا يتحمل مسؤولية أين كان.</li>
+                            <li>استمتع بتجربتك وكن سبباً في جعل تجربة الآخرين ممتعة.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="site-footer">
+            <p class="footer-copyright">© 2025 VoidChat. جميع الحقوق محفوظة.</p>
+            <p class="footer-credit">صُنع بكل ❤️ بواسطة <a href="https://github.com/TakachiOu" target="_blank" class="credit-link">Takachi-Ou</a></p>
+        </footer>
+    </div>
+
+    <div id="chat-view" class="hidden">
+        <div class="chat-container">
+            <p class="chat-status"></p>
+            <div class="messages-area"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input-field" placeholder="اكتب رسالتك..." disabled>
+                <button id="leave-button" title="إنهاء المحادثة" disabled><i class="fa-solid fa-right-from-bracket"></i></button>
+                <button id="send-button" disabled>إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
