@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestionBtn: 'Send Suggestion',
             suggestionThanks: 'Thank you! Your suggestion has been sent successfully.',
             copyright: '© 2025 VoidChat. All rights reserved.',
-            credit: 'Made with ❤️ by <a href="https://github.com/TakachiOu" target="_blank" class="credit-link">Takachi-Ou</a>',
+            credit: 'Made with ❤️ by <a href="" target="_blank" class="credit-link">Takachi</a>',
             chatPlaceholder: 'Type your message...',
             chatSendBtn: 'Send',
             statusSearching: 'Searching for a stranger',
