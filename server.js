@@ -21,7 +21,6 @@ const MESSAGE_RATE_PERIOD = 60 * 1000; // per 1 minute
 const messageHistory = new Map(); // For anti-repetition
 const waitingUsers = new Map();
 
-
 // --- Main Connection Handler ---
 io.on('connection', (socket) => {
     console.log(`[+] User Connected: ${socket.id}`);
@@ -116,7 +115,8 @@ io.on('connection', (socket) => {
 
     // --- Disconnect Logic ---
     socket.on('disconnect', () => {
-        console.log(`[-] User Disconnected: ${socket.id}`);
+        console.log(`[-] User Disconnected: ${socket.id}`); 
+
         // Cleanup from all systems
         for (const users of waitingUsers.values()) {
             const index = users.indexOf(socket.id);

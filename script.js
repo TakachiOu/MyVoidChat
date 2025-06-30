@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. التهيئة والمحددات
     // =================================
     const socket = io();
+    socket.on('updateOnlineUsers', (count) => {
+    const counter = document.getElementById('onlineCount');
+    if (counter) counter.textContent = count;
+});
     let currentRoom = '';
     let typingTimer;
     const typingTimeout = 1500;
@@ -56,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             credit: 'صُنع بكل ❤️ بواسطة <a href="https://github.com/TakachiOu" target="_blank" class="credit-link">Takachi-Ou</a>',
             chatPlaceholder: 'اكتب رسالتك...',
             chatSendBtn: 'إرسال',
-            statusSearching: 'جارٍ البحث عن غريب...',
+            statusSearching: 'جارٍ البحث عن غريب',
             statusMatchFound: 'تم الاتصال بغريب. ابدأ المحادثة!',
             partnerTyping: 'شريكك يكتب الآن...',
             partnerLeft: 'لقد غادر الغريب المحادثة.'
@@ -67,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mainTitle: 'Enter the Void & Talk with the Unknown',
             subtitle: 'Share your interests, talk to someone with the same passion, then vanish without a trace.',
             tagsPlaceholder: 'Enter a tag to chat with someone with the same tag',
-            ctaButton: 'Find a Stranger',
+            ctaButton: 'Find a Stranger', 
             searchingButton: 'Searching...',
             aboutTitle: 'What is VoidChat?',
             aboutText: 'A simple and safe platform that gives you the opportunity to enter into text-based, random, and completely anonymous conversations with strangers who share your interests.',
@@ -88,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             credit: 'Made with ❤️ by <a href="https://github.com/TakachiOu" target="_blank" class="credit-link">Takachi-Ou</a>',
             chatPlaceholder: 'Type your message...',
             chatSendBtn: 'Send',
-            statusSearching: 'Searching for a stranger...',
+            statusSearching: 'Searching for a stranger',
             statusMatchFound: 'Connected with a stranger. Start chatting!',
             partnerTyping: 'Partner is typing...',
             partnerLeft: 'The stranger has left the conversation.'
@@ -165,6 +169,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================
+    // 3.5 حركة النقاط في "جارٍ البحث"
+    // =================================
+    let dotAnimationInterval;
+
+    function startDotAnimation() {
+        let dotCount = 0;
+        stopDotAnimation(); // تأكد من عدم تكرار المؤقت
+        dotAnimationInterval = setInterval(() => {
+            dotCount = (dotCount + 1) % 4; // 0 → 1 → 2 → 3 → 0
+            const dots = '.'.repeat(dotCount);
+            chatStatus.textContent = translations[currentLang].statusSearching + dots;
+        }, 500); // كل 0.5 ثانية تحديث
+    }
+
+    function stopDotAnimation() {
+        if (dotAnimationInterval) {
+            clearInterval(dotAnimationInterval);
+            dotAnimationInterval = null;
+        }
+    }
+
+    // =================================
     // 4. مستمعو الأحداث (User Actions)
     // =================================
 
@@ -214,6 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     leaveButton.addEventListener('click', () => {
+        stopDotAnimation();
+
         if (currentRoom) {
             socket.emit('leaveRoom', currentRoom);
         } else {
@@ -242,9 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
         chatStatus.textContent = translations[currentLang].statusSearching;
         chatStatus.dataset.keyStatus = 'statusSearching';
         leaveButton.disabled = false;
+        startDotAnimation();
+
     });
 
     socket.on('matchFound', (data) => {
+        stopDotAnimation();
         currentRoom = data.room;
         mainView.classList.add('hidden');
         chatView.classList.remove('hidden');
@@ -257,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('partnerLeft', () => {
+        stopDotAnimation();
         displayMessage(translations[currentLang].partnerLeft, 'system-message');
         inputField.disabled = true;
         sendButton.disabled = true;
