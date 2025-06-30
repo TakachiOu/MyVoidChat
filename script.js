@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestionBtn: 'إرسال الاقتراح',
             suggestionThanks: 'شكراً لك! تم إرسال اقتراحك بنجاح.',
             copyright: '© 2025 VoidChat. جميع الحقوق محفوظة.',
-            credit: 'صُنع بكل ❤️ بواسطة <a href="https://github.com/TakachiOu" target="_blank" class="credit-link">Takachi-Ou</a>',
+            credit: 'صُنع بكل ❤️ بواسطة <a href="" target="_blank" class="credit-link">Takachi</a>',
             chatPlaceholder: 'اكتب رسالتك...',
             chatSendBtn: 'إرسال',
             statusSearching: 'جارٍ البحث عن غريب',
