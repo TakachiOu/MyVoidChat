@@ -1,18 +1,27 @@
-// server.js - Final, Clean, and Complete Version
+// server.js - Modified for Android App Compatibility
 
 const express = require('express');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const { Server } = require("socket.io");
+const cors = require('cors'); // <== 1. REQUIRE CORS PACKAGE
 
 const app = express();
-app.use(express.static('public'));
-const server = http.createServer(app);
-const io = new Server(server);
-const PORT = process.env.PORT || 3000;
+app.use(cors()); // <== 2. ENABLE CORS FOR EXPRESS
+app.use(express.static('public')); // This correctly serves files from your 'public' folder
 
-app.use(express.static(path.join(__dirname)));
+const server = http.createServer(app);
+
+// <== 3. CONFIGURE SOCKET.IO SERVER WITH CORS
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Allows connections from any domain, including your app
+    methods: ["GET", "POST"]
+  }
+});
+
+const PORT = process.env.PORT || 3000;
 
 // --- Configuration for Features ---
 const messageLimiter = new Map();
