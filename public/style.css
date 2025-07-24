@@ -1,4 +1,7 @@
 /* --- General Setup & Variables --- */
+input, textarea, button {
+    transition: all 0.3s ease;
+}
 :root {
     --bg-color: #0d0f18;
     --primary-color: #1b1e2f;
@@ -270,4 +273,86 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
 /* Helper class to hide the modal */
 .hidden {
     display: none !important;
+}
+
+/* =================================== */
+/* --- اقتراحات لتحسين التجاوب --- */
+/* =================================== */
+
+/* --- حالة التركيز (لتحسين سهولة الوصول) --- */
+/* هذا يضيف إطاراً واضحاً حول الأزرار وحقول الإدخال عند تحديدها بلوحة المفاتيح */
+.cta-button:focus, 
+.lang-toggle-btn:focus,
+#submit-suggestion-btn:focus,
+#tags-input:focus,
+#chat-input-field:focus,
+#suggestion-textarea:focus {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 3px;
+    border-color: var(--accent-color) !important; /* لتغيير لون الحد أيضاً عند التركيز */
+}
+
+
+/* --- لأجهزة التابلت (الشاشات الأصغر من 992px) --- */
+@media (max-width: 992px) {
+    .main-title {
+        font-size: 3rem; /* تصغير العنوان قليلاً */
+    }
+}
+
+
+/* --- لأجهزة الموبايل (الشاشات الأصغر من 768px) --- */
+@media (max-width: 768px) {
+    /* تقليل الحشو العام للصفحة */
+    header, .container {
+        padding: 20px 5%; 
+    }
+
+    .main-title {
+        font-size: 2.2rem; /* تصغير العنوان بشكل أكبر للهواتف */
+        line-height: 1.3;
+    }
+
+    .subtitle {
+        font-size: 1rem; /* تصغير حجم النص الثانوي */
+    }
+
+    .cta-button {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+
+    .content-block h2 {
+        font-size: 1.8rem; /* تصغير عناوين الأقسام */
+    }
+
+    .features-list li, .rules-list li {
+        font-size: 1rem;
+    }
+}
+
+
+/* --- للشاشات الصغيرة جداً (أصغر من 480px) --- */
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 1.9rem;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .chat-input-area {
+        padding: 10px; /* تقليل الحشو في منطقة الشات */
+        gap: 8px;
+    }
+    
+    .chat-input-area input {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .chat-input-area button {
+        padding: 0 20px;
+    }
 }
