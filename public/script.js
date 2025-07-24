@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================
     // 1. التهيئة والمحددات
     // =================================
-    const socket = io();
+    const socket = io("https://myvoidchat.onrender.com");   
     socket.on('updateOnlineUsers', (count) => {
     const counter = document.getElementById('onlineCount');
     if (counter) counter.textContent = count;
