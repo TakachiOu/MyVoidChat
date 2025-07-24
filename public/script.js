@@ -3,16 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================
     // 1. التهيئة والمحددات
     // =================================
-    const socket = io("https://myvoidchat.onrender.com");   
+    const socket = io("https://myvoidchat.onrender.com");
     socket.on('updateOnlineUsers', (count) => {
-    const counter = document.getElementById('onlineCount');
-    if (counter) counter.textContent = count;
-});
+        const counter = document.getElementById('onlineCount');
+        if (counter) counter.textContent = count;
+    });
     let currentRoom = '';
     let typingTimer;
     const typingTimeout = 1500;
     const tags = new Set();
-    
+
     // محددات العناصر
     const mainView = document.getElementById('main-view');
     const chatView = document.getElementById('chat-view');
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmLeaveTitle: 'هل أنت متأكد؟',
             confirmLeaveText: 'هل تريد حقاً مغادرة المحادثة؟',
             confirmYes: 'نعم، غادر',
-       
+            confirmNo: 'لا، ابقَ' // <== تم إصلاح هذا السطر أيضاً
         },
         en: {
             langToggle: 'العربية',
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mainTitle: 'Enter the Void & Talk with the Unknown',
             subtitle: 'Share your interests, talk to someone with the same passion, then vanish without a trace.',
             tagsPlaceholder: 'Enter a tag to chat with someone with the same tag',
-            ctaButton: 'Find a Stranger', 
+            ctaButton: 'Find a Stranger',
             searchingButton: 'Searching...',
             aboutTitle: 'What is VoidChat?',
             aboutText: 'A simple and safe platform that gives you the opportunity to enter into text-based, random, and completely anonymous conversations with strangers who share your interests.',
@@ -107,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmLeaveText: 'Do you really want to leave the conversation?',
             confirmYes: 'Yes, Leave',
             confirmNo: 'No, Stay'
-
         }
     };
     let currentLang = 'ar';
@@ -119,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyTranslations() {
         document.documentElement.lang = currentLang;
         document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-        
+
         const elementsToTranslate = document.querySelectorAll('[data-key]');
         elementsToTranslate.forEach(element => {
             const key = element.getAttribute('data-key');
@@ -133,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const currentStatusKey = chatStatus.dataset.keyStatus;
-        if(currentStatusKey) {
+        if (currentStatusKey) {
             chatStatus.textContent = translations[currentLang][currentStatusKey];
         }
     }
@@ -187,12 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startDotAnimation() {
         let dotCount = 0;
-        stopDotAnimation(); // تأكد من عدم تكرار المؤقت
+        stopDotAnimation();
         dotAnimationInterval = setInterval(() => {
-            dotCount = (dotCount + 1) % 4; // 0 → 1 → 2 → 3 → 0
+            dotCount = (dotCount + 1) % 4;
             const dots = '.'.repeat(dotCount);
             chatStatus.textContent = translations[currentLang].statusSearching + dots;
-        }, 500); // كل 0.5 ثانية تحديث
+        }, 500);
     }
 
     function stopDotAnimation() {
@@ -210,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLang = currentLang === 'ar' ? 'en' : 'ar';
         applyTranslations();
     });
-    
+
     tagsInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
             const newTag = tagsInput.value.trim().toLowerCase();
@@ -250,27 +249,25 @@ document.addEventListener('DOMContentLoaded', () => {
             socket.emit('userStoppedTyping', { room: currentRoom });
         }
     });
-    
-leaveButton.addEventListener('click', () => {
-    confirmModal.classList.remove('hidden'); // إظهار نافذة التأكيد
-});
 
-confirmNoBtn.addEventListener('click', () => {
-    confirmModal.classList.add('hidden');
-});
+    leaveButton.addEventListener('click', () => {
+        confirmModal.classList.remove('hidden');
+    });
 
-confirmYesBtn.addEventListener('click', () => {
-    stopDotAnimation();
+    confirmNoBtn.addEventListener('click', () => {
+        confirmModal.classList.add('hidden');
+    });
 
-    if (currentRoom) {
-        socket.emit('leaveRoom', currentRoom);
-    } else {
-        socket.emit('cancelSearch');
-    }
-    resetChatState();
-    confirmModal.classList.add('hidden'); // إخفاء النافذة بعد الخروج
-});
-
+    confirmYesBtn.addEventListener('click', () => {
+        stopDotAnimation();
+        if (currentRoom) {
+            socket.emit('leaveRoom', currentRoom);
+        } else {
+            socket.emit('cancelSearch');
+        }
+        resetChatState();
+        confirmModal.classList.add('hidden');
+    });
 
     submitSuggestionBtn.addEventListener('click', () => {
         const suggestion = suggestionTextarea.value.trim();
@@ -293,7 +290,6 @@ confirmYesBtn.addEventListener('click', () => {
         chatStatus.dataset.keyStatus = 'statusSearching';
         leaveButton.disabled = false;
         startDotAnimation();
-
     });
 
     socket.on('matchFound', (data) => {
@@ -327,9 +323,27 @@ confirmYesBtn.addEventListener('click', () => {
         chatStatus.textContent = translations[currentLang].statusMatchFound;
         chatStatus.dataset.keyStatus = 'statusMatchFound';
     });
-    
+
     socket.on('chatMessage', (message) => {
         displayMessage(message, 'stranger-message');
     });
 
-});
+    // ▼▼▼-- تم نقل كود زر الرجوع إلى هنا --▼▼▼
+    // --- Android Back Button Handler (Corrected Version) ---
+    if (window.Capacitor && Capacitor.isPluginAvailable('App')) {
+        const { App } = Capacitor.Plugins;
+        App.addListener('backButton', () => {
+            const isModalVisible = !confirmModal.classList.contains('hidden');
+            const isChatViewVisible = !chatView.classList.contains('hidden');
+            if (isModalVisible) {
+                confirmModal.classList.add('hidden');
+            } else if (isChatViewVisible) {
+                confirmModal.classList.remove('hidden');
+            } else {
+                App.exitApp();
+            }
+        });
+    }
+    
+
+}); 
