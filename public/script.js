@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputField = document.getElementById('chat-input-field');
     const sendButton = document.getElementById('send-button');
     const leaveButton = document.getElementById('leave-button');
+    const confirmModal = document.getElementById('confirm-modal');
+    const confirmYesBtn = document.getElementById('confirm-yes-btn');
+    const confirmNoBtn = document.getElementById('confirm-no-btn');
     const suggestionTextarea = document.getElementById('suggestion-textarea');
     const submitSuggestionBtn = document.getElementById('submit-suggestion-btn');
     const suggestionThanksMsg = document.getElementById('suggestion-thanks');
@@ -63,7 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
             statusSearching: 'جارٍ البحث عن غريب',
             statusMatchFound: 'تم الاتصال بغريب. ابدأ المحادثة!',
             partnerTyping: 'شريكك يكتب الآن...',
-            partnerLeft: 'لقد غادر الغريب المحادثة.'
+            partnerLeft: 'لقد غادر الغريب المحادثة.',
+            confirmLeaveTitle: 'هل أنت متأكد؟',
+            confirmLeaveText: 'هل تريد حقاً مغادرة المحادثة؟',
+            confirmYes: 'نعم، غادر',
+       
         },
         en: {
             langToggle: 'العربية',
@@ -95,7 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
             statusSearching: 'Searching for a stranger',
             statusMatchFound: 'Connected with a stranger. Start chatting!',
             partnerTyping: 'Partner is typing...',
-            partnerLeft: 'The stranger has left the conversation.'
+            partnerLeft: 'The stranger has left the conversation.',
+            confirmLeaveTitle: 'Are you sure?',
+            confirmLeaveText: 'Do you really want to leave the conversation?',
+            confirmYes: 'Yes, Leave',
+            confirmNo: 'No, Stay'
+
         }
     };
     let currentLang = 'ar';
@@ -239,16 +251,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    leaveButton.addEventListener('click', () => {
-        stopDotAnimation();
+leaveButton.addEventListener('click', () => {
+    confirmModal.classList.remove('hidden'); // إظهار نافذة التأكيد
+});
 
-        if (currentRoom) {
-            socket.emit('leaveRoom', currentRoom);
-        } else {
-            socket.emit('cancelSearch');
-        }
-        resetChatState();
-    });
+confirmNoBtn.addEventListener('click', () => {
+    confirmModal.classList.add('hidden');
+});
+
+confirmYesBtn.addEventListener('click', () => {
+    stopDotAnimation();
+
+    if (currentRoom) {
+        socket.emit('leaveRoom', currentRoom);
+    } else {
+        socket.emit('cancelSearch');
+    }
+    resetChatState();
+    confirmModal.classList.add('hidden'); // إخفاء النافذة بعد الخروج
+});
+
 
     submitSuggestionBtn.addEventListener('click', () => {
         const suggestion = suggestionTextarea.value.trim();
