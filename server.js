@@ -42,6 +42,14 @@ io.on('connection', (socket) => {
         for (const tag of searchTags) {
             if (waitingUsers.has(tag) && waitingUsers.get(tag).length > 0) {
                 const partnerSocketId = waitingUsers.get(tag).shift();
+                
+                // التحقق من أن الشريك المحتمل ليس هو المستخدم نفسه
+                if (partnerSocketId === socket.id) {
+                    // إذا كان هو المستخدم نفسه، أعده إلى بداية قائمة الانتظار وجرب مجدداً
+                    waitingUsers.get(tag).unshift(partnerSocketId);
+                    continue; // انتقل إلى المستخدم التالي في القائمة
+                }
+
                 const partnerSocket = io.sockets.sockets.get(partnerSocketId);
                 if (partnerSocket) {
                     partnerFound = true;
