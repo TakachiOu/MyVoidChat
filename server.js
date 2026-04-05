@@ -1,10 +1,11 @@
+// server.js - Final, Robust, and Secure Version
+
 const express = require('express');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const { Server } = require("socket.io");
 const cors = require('cors');
-const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
@@ -12,33 +13,12 @@ app.use(express.static('public'));
 
 const server = http.createServer(app);
 
-// 1. تعريف الـ io (كان مفقوداً وتمت إضافته لتجنب الخطأ)
 const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
   }
 });
-
-// ==========================================
-// 2. إعداد قاعدة البيانات (MongoDB Cloud)
-// ==========================================
-const dbURI = "mongodb+srv://takachi_admin:Abde%40bvb123@myvoidchatbd.kz1sfwq.mongodb.net/voidchat?retryWrites=true&w=majority&appName=MyVoidChatBD";
-
-mongoose.connect(dbURI)
-  .then(() => console.log("[Connected] MongoDB Cloud is ready! ✅"))
-  .catch(err => console.error("[Error] Could not connect to MongoDB:", err));
-
-// تعريف شكل الرسالة (Schema)
-const messageSchema = new mongoose.Schema({
-    room: String,
-    senderId: String,
-    message: String,
-    timestamp: { type: Date, default: Date.now }
-});
-
-const Message = mongoose.model('Message', messageSchema);
-// ==========================================
 
 const PORT = process.env.PORT || 3000;
 
@@ -54,50 +34,72 @@ const activeRooms = new Map();
 io.on('connection', (socket) => {
     console.log(`[+] User Connected: ${socket.id}`);
 
-    // --- Find Partner Logic ---
+    // --- Find Partner Logic (SMART FALLBACK MATCHING) ---
     socket.on('findPartner', (tags) => {
-        const searchTags = tags.length > 0 ? tags : ['#random'];
-        let partnerFound = false;
+        // 1. تحويل كل التاغات لحروف صغيرة باش ما يفرقش بين DZ و dz
+        const searchTags = tags.map(t => typeof t === 'string' ? t.toLowerCase() : t);
+        let partnerSocketId = null;
+        let matchedTag = null;
 
+        // 2. المحاولة الأولى: البحث عن شخص يملك نفس الـ Tag
         for (const tag of searchTags) {
             if (waitingUsers.has(tag) && waitingUsers.get(tag).length > 0) {
                 for (let i = 0; i < waitingUsers.get(tag).length; i++) {
-                    const partnerSocketId = waitingUsers.get(tag)[i];
-
-                    if (partnerSocketId !== socket.id && io.sockets.sockets.has(partnerSocketId)) {
-                        waitingUsers.get(tag).splice(i, 1); 
-                        const partnerSocket = io.sockets.sockets.get(partnerSocketId);
-
-                        partnerFound = true;
-                        const room = `room-${socket.id}-${partnerSocket.id}`;
-                        
-                        partnerSocket.join(room);
-                        socket.join(room);
-
-                        activeRooms.set(socket.id, room);
-                        activeRooms.set(partnerSocket.id, room);
-
-                        io.to(room).emit('matchFound', { room: room });
-                        break; 
+                    const pId = waitingUsers.get(tag)[i];
+                    if (pId !== socket.id && io.sockets.sockets.has(pId)) {
+                        partnerSocketId = pId;
+                        matchedTag = tag; // تم إيجاد تطابق
+                        waitingUsers.get(tag).splice(i, 1);
+                        break;
                     }
                 }
             }
-            if (partnerFound) break; 
+            if (partnerSocketId) break;
         }
 
-        if (!partnerFound) {
-            for (const tag of searchTags) {
-                if (!waitingUsers.has(tag)) { waitingUsers.set(tag, []); }
-                if (!waitingUsers.get(tag).includes(socket.id)) {
-                    waitingUsers.get(tag).push(socket.id);
+        // 3. المحاولة الثانية: إذا لم نجد نفس الـ Tag، نبحث عن أي شخص في قائمة الانتظار العامة
+        if (!partnerSocketId) {
+            for (const [tag, users] of waitingUsers.entries()) {
+                for (let i = 0; i < users.length; i++) {
+                    const pId = users[i];
+                    if (pId !== socket.id && io.sockets.sockets.has(pId)) {
+                        partnerSocketId = pId;
+                        matchedTag = null; // القيمة null تعني أنه لم يتم التطابق في الـ Tag
+                        waitingUsers.get(tag).splice(i, 1);
+                        break;
+                    }
                 }
+                if (partnerSocketId) break;
+            }
+        }
+
+        // 4. إذا وجدنا شريك (سواء بنفس الـ Tag أو عشوائي)
+        if (partnerSocketId) {
+            const partnerSocket = io.sockets.sockets.get(partnerSocketId);
+            const room = `room-${socket.id}-${partnerSocket.id}`;
+            
+            partnerSocket.join(room);
+            socket.join(room);
+
+            activeRooms.set(socket.id, room);
+            activeRooms.set(partnerSocket.id, room);
+
+            // نبعث للطرفين بلي لقينا شريك ونخبروهم هل التطابق بالـ Tag ولا عشوائي
+            io.to(socket.id).emit('matchFound', { room: room, matchedTag: matchedTag });
+            io.to(partnerSocketId).emit('matchFound', { room: room, matchedTag: matchedTag });
+        } else {
+            // 5. إذا لم يكن هناك أي شخص في الموقع إطلاقاً، نضعه في قائمة الانتظار
+            const waitTag = searchTags.length > 0 ? searchTags[0] : '#random';
+            if (!waitingUsers.has(waitTag)) { waitingUsers.set(waitTag, []); }
+            if (!waitingUsers.get(waitTag).includes(socket.id)) {
+                waitingUsers.get(waitTag).push(socket.id);
             }
             socket.emit('waitingForPartner');
         }
     });
 
-    // --- Chat Message Logic (مع حفظ الرسائل في القاعدة) ---
-    socket.on('chatMessage', async (data) => {
+    // --- Chat Message Logic (with security) ---
+    socket.on('chatMessage', (data) => {
         const history = messageHistory.get(socket.id) || [];
         if (data.message === history[0] && data.message === history[1]) return;
 
@@ -110,22 +112,7 @@ io.on('connection', (socket) => {
         messageLimiter.set(socket.id, recentTimestamps);
         const newHistory = [data.message, ...history].slice(0, 2);
         messageHistory.set(socket.id, newHistory);
-        
-        // إرسال الرسالة للشريك في نفس اللحظة
         socket.to(data.room).emit('chatMessage', data.message);
-
-        // حفظ الرسالة في MongoDB بصمت
-        try {
-            const newMessage = new Message({
-                room: data.room,
-                senderId: socket.id,
-                message: data.message
-            });
-            await newMessage.save();
-            console.log(`[DB] Message saved in ${data.room}`);
-        } catch (err) {
-            console.error("[DB Error] Failed to save message:", err);
-        }
     });
 
     // --- "Is Typing" Logic ---
@@ -164,7 +151,6 @@ io.on('connection', (socket) => {
     // --- Disconnect Logic ---
     socket.on('disconnect', () => {
         console.log(`[-] User Disconnected: ${socket.id}`);
-
         const room = activeRooms.get(socket.id);
         if (room) {
             socket.to(room).emit('partnerLeft');
