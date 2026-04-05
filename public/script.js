@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const tags = new Set();
 
     // --- قائمة الكلمات الممنوعة (تقدر تزيد فيها واش تحب) ---
-    const forbiddenWords = ['زب', 'نيك', 'موك', 'قحب', 'فرخ', 'طحان', 'خرا'];
+    const forbiddenWords = [
+    'زب', 'نيك', 'حتشون', 'قحب', 'نقش', 'ترمة', 'سوة','قحبة','بنوتي', 'موجب', 'سالب', 'كس', 
+    'dick', 'fack', 'زك', 'ديوث','شرموطة',
+     'عطاي', 'منيوك', 'شرموط', 'fuck' ];
 
     // محددات العناصر
     const mainView = document.getElementById('main-view');
