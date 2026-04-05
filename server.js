@@ -23,7 +23,10 @@ const io = new Server(server, {
 const PORT = process.env.PORT || 3000;
 
 // --- 1. إعدادات الفلترة والحماية ---
-const forbiddenWords = ['زب', 'نيك', 'موك', 'قحب', 'فرخ', 'طحان', 'خرا'];
+const forbiddenWords = [
+    'زب', 'نيك', 'حتشون', 'قحب', 'نقش', 'ترمة', 'سوة','قحبة','بنوتي', 'موجب', 'سالب', 'كس', 
+    'dick', 'fack', 'زك', 'ديوث','شرموطة',
+     'عطاي', 'منيوك', 'شرموط', 'fuck' ];
 
 function filterMessage(text) {
     if (typeof text !== 'string') return text;
