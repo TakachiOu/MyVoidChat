@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const typingTimeout = 1500;
     const tags = new Set();
 
+    // --- قائمة الكلمات الممنوعة (تقدر تزيد فيها واش تحب) ---
+    const forbiddenWords = ['زب', 'نيك', 'موك', 'قحب', 'فرخ', 'طحان', 'خرا'];
+
     // محددات العناصر
     const mainView = document.getElementById('main-view');
     const chatView = document.getElementById('chat-view');
@@ -64,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatPlaceholder: 'اكتب رسالتك...',
             chatSendBtn: 'إرسال',
             statusSearching: 'جارٍ البحث عن غريب',
-            // الجمل الجديدة للتطابق
             statusMatchFoundTag: 'تم الاتصال بشريك يشاركك الـ Tag: ',
             statusMatchFoundRandom: 'تم الاتصال بغريب (لم نجد نفس الـ Tag)',
             partnerTyping: 'شريكك يكتب الآن...',
@@ -102,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatPlaceholder: 'Type your message...',
             chatSendBtn: 'Send',
             statusSearching: 'Searching for a stranger',
-            // الجمل الجديدة للتطابق
             statusMatchFoundTag: 'Connected with a partner sharing Tag: ',
             statusMatchFoundRandom: 'Connected with a stranger (No tag match found)',
             partnerTyping: 'Partner is typing...',
@@ -135,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // تحديث الرسالة حسب نوع التطابق عند تغيير اللغة
         const matchType = chatStatus.dataset.matchType;
         if (matchType === 'tag') {
             chatStatus.textContent = translations[currentLang].statusMatchFoundTag + chatStatus.dataset.matchedTag;
@@ -147,6 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 chatStatus.textContent = translations[currentLang][currentStatusKey];
             }
         }
+    }
+
+    // دالة الفلترة لتعويض الكلمات السيئة بالنجوم
+    function filterLocalMessage(text) {
+        let filteredText = text;
+        forbiddenWords.forEach(word => {
+            const regex = new RegExp(word, 'gi');
+            filteredText = filteredText.replace(regex, '*'.repeat(word.length));
+        });
+        return filteredText;
     }
 
     function renderTags() {
@@ -168,10 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function sendMessage() {
-        const message = inputField.value.trim();
-        if (message && currentRoom) {
-            socket.emit('chatMessage', { room: currentRoom, message: message });
-            displayMessage(message, 'my-message');
+        const rawMessage = inputField.value.trim();
+        if (rawMessage && currentRoom) {
+            // نرسل الرسالة الأصلية للسيرفر
+            socket.emit('chatMessage', { room: currentRoom, message: rawMessage });
+            
+            // نفلتر الرسالة محلياً قبل عرضها للمرسل
+            const cleanMessage = filterLocalMessage(rawMessage);
+            displayMessage(cleanMessage, 'my-message');
+            
             inputField.value = '';
             inputField.focus();
         }
@@ -189,13 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRoom = '';
         chatStatus.textContent = '';
         chatStatus.dataset.keyStatus = '';
-        chatStatus.dataset.matchType = ''; // تنظيف المتغيرات
-        chatStatus.dataset.matchedTag = ''; // تنظيف المتغيرات
+        chatStatus.dataset.matchType = '';
+        chatStatus.dataset.matchedTag = '';
     }
 
-    // =================================
-    // 3.5 حركة النقاط في "جارٍ البحث"
-    // =================================
     let dotAnimationInterval;
 
     function startDotAnimation() {
@@ -226,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tagsInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
-            const newTag = tagsInput.value.trim().toLowerCase(); // الحروف تتحول لصغيرة هنا أيضاً
+            const newTag = tagsInput.value.trim().toLowerCase();
             if (newTag && !tags.has(newTag)) {
                 tags.add(newTag);
                 renderTags();
@@ -302,19 +314,17 @@ document.addEventListener('DOMContentLoaded', () => {
         chatView.classList.remove('hidden');
         chatStatus.textContent = translations[currentLang].statusSearching;
         chatStatus.dataset.keyStatus = 'statusSearching';
-        chatStatus.dataset.matchType = ''; // تنظيف المتغير
+        chatStatus.dataset.matchType = '';
         leaveButton.disabled = false;
         startDotAnimation();
     });
 
-    // --- المنطق الجديد عند إيجاد شريك ---
     socket.on('matchFound', (data) => {
         stopDotAnimation();
         currentRoom = data.room;
         mainView.classList.add('hidden');
         chatView.classList.remove('hidden');
         
-        // تحديد النص بناءً على نوع التطابق (هل كان بـ Tag أم عشوائي)
         if (data.matchedTag) {
             chatStatus.textContent = translations[currentLang].statusMatchFoundTag + data.matchedTag;
             chatStatus.dataset.matchType = 'tag';
@@ -343,11 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('partnerTyping', () => {
         chatStatus.textContent = translations[currentLang].partnerTyping;
-        // لا نقوم بتحديث الـ dataset هنا لكي يبقى يحتفظ بنوع التطابق إذا غيرنا اللغة أثناء الكتابة
     });
 
     socket.on('partnerStoppedTyping', () => {
-        // عند التوقف عن الكتابة، نرجع الرسالة الأصلية حسب نوع التطابق
         if (chatStatus.dataset.matchType === 'tag') {
             chatStatus.textContent = translations[currentLang].statusMatchFoundTag + chatStatus.dataset.matchedTag;
         } else if (chatStatus.dataset.matchType === 'random') {
@@ -356,10 +364,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('chatMessage', (message) => {
-        displayMessage(message, 'stranger-message');
+        // نفلتر الرسالة القادمة من الغريب أيضاً لزيادة الأمان
+        const cleanMessage = filterLocalMessage(message);
+        displayMessage(cleanMessage, 'stranger-message');
     });
 
-    // --- Android Back Button Handler ---
     if (window.Capacitor && Capacitor.isPluginAvailable('App')) {
         const { App } = Capacitor.Plugins;
         App.addListener('backButton', () => {
@@ -374,5 +383,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
 });

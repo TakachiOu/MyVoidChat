@@ -1,4 +1,4 @@
-// server.js - Final, Robust, and Secure Version
+// server.js - Final, Robust, and Secure Version with Content Filtering
 
 const express = require('express');
 const http = require('http');
@@ -22,6 +22,19 @@ const io = new Server(server, {
 
 const PORT = process.env.PORT || 3000;
 
+// --- 1. إعدادات الفلترة والحماية ---
+const forbiddenWords = ['زب', 'نيك', 'موك', 'قحب', 'فرخ', 'طحان', 'خرا'];
+
+function filterMessage(text) {
+    if (typeof text !== 'string') return text;
+    let filteredText = text;
+    forbiddenWords.forEach(word => {
+        const regex = new RegExp(word, 'gi');
+        filteredText = filteredText.replace(regex, '*'.repeat(word.length));
+    });
+    return filteredText;
+}
+
 const messageLimiter = new Map();
 const MESSAGE_RATE_LIMIT = 20;
 const MESSAGE_RATE_PERIOD = 60 * 1000;
@@ -34,21 +47,23 @@ const activeRooms = new Map();
 io.on('connection', (socket) => {
     console.log(`[+] User Connected: ${socket.id}`);
 
+    // تحديث عدد المتصلين (اختياري إذا كنت تستعمله)
+    io.emit('updateOnlineUsers', io.engine.clientsCount);
+
     // --- Find Partner Logic (SMART FALLBACK MATCHING) ---
     socket.on('findPartner', (tags) => {
-        // 1. تحويل كل التاغات لحروف صغيرة باش ما يفرقش بين DZ و dz
         const searchTags = tags.map(t => typeof t === 'string' ? t.toLowerCase() : t);
         let partnerSocketId = null;
         let matchedTag = null;
 
-        // 2. المحاولة الأولى: البحث عن شخص يملك نفس الـ Tag
+        // البحث عن شخص يملك نفس الـ Tag
         for (const tag of searchTags) {
             if (waitingUsers.has(tag) && waitingUsers.get(tag).length > 0) {
                 for (let i = 0; i < waitingUsers.get(tag).length; i++) {
                     const pId = waitingUsers.get(tag)[i];
                     if (pId !== socket.id && io.sockets.sockets.has(pId)) {
                         partnerSocketId = pId;
-                        matchedTag = tag; // تم إيجاد تطابق
+                        matchedTag = tag;
                         waitingUsers.get(tag).splice(i, 1);
                         break;
                     }
@@ -57,14 +72,14 @@ io.on('connection', (socket) => {
             if (partnerSocketId) break;
         }
 
-        // 3. المحاولة الثانية: إذا لم نجد نفس الـ Tag، نبحث عن أي شخص في قائمة الانتظار العامة
+        // البحث العشوائي إذا لم نجد التاغ
         if (!partnerSocketId) {
             for (const [tag, users] of waitingUsers.entries()) {
                 for (let i = 0; i < users.length; i++) {
                     const pId = users[i];
                     if (pId !== socket.id && io.sockets.sockets.has(pId)) {
                         partnerSocketId = pId;
-                        matchedTag = null; // القيمة null تعني أنه لم يتم التطابق في الـ Tag
+                        matchedTag = null;
                         waitingUsers.get(tag).splice(i, 1);
                         break;
                     }
@@ -73,7 +88,6 @@ io.on('connection', (socket) => {
             }
         }
 
-        // 4. إذا وجدنا شريك (سواء بنفس الـ Tag أو عشوائي)
         if (partnerSocketId) {
             const partnerSocket = io.sockets.sockets.get(partnerSocketId);
             const room = `room-${socket.id}-${partnerSocket.id}`;
@@ -84,11 +98,9 @@ io.on('connection', (socket) => {
             activeRooms.set(socket.id, room);
             activeRooms.set(partnerSocket.id, room);
 
-            // نبعث للطرفين بلي لقينا شريك ونخبروهم هل التطابق بالـ Tag ولا عشوائي
             io.to(socket.id).emit('matchFound', { room: room, matchedTag: matchedTag });
             io.to(partnerSocketId).emit('matchFound', { room: room, matchedTag: matchedTag });
         } else {
-            // 5. إذا لم يكن هناك أي شخص في الموقع إطلاقاً، نضعه في قائمة الانتظار
             const waitTag = searchTags.length > 0 ? searchTags[0] : '#random';
             if (!waitingUsers.has(waitTag)) { waitingUsers.set(waitTag, []); }
             if (!waitingUsers.get(waitTag).includes(socket.id)) {
@@ -98,11 +110,18 @@ io.on('connection', (socket) => {
         }
     });
 
-    // --- Chat Message Logic (with security) ---
+    // --- Chat Message Logic (WITH FILTERING & SECURITY) ---
     socket.on('chatMessage', (data) => {
-        const history = messageHistory.get(socket.id) || [];
-        if (data.message === history[0] && data.message === history[1]) return;
+        if (!data.message || !data.room) return;
 
+        // 1. فلترة الرسالة فوراً
+        const cleanMessage = filterMessage(data.message);
+
+        // 2. منع التكرار المزعج (Spam Prevention)
+        const history = messageHistory.get(socket.id) || [];
+        if (cleanMessage === history[0] && cleanMessage === history[1]) return;
+
+        // 3. تحديد سرعة الإرسال (Rate Limiting)
         const now = Date.now();
         const userTimestamps = messageLimiter.get(socket.id) || [];
         const recentTimestamps = userTimestamps.filter(timestamp => now - timestamp < MESSAGE_RATE_PERIOD);
@@ -110,9 +129,13 @@ io.on('connection', (socket) => {
 
         recentTimestamps.push(now);
         messageLimiter.set(socket.id, recentTimestamps);
-        const newHistory = [data.message, ...history].slice(0, 2);
+
+        // 4. تحديث سجل الرسائل
+        const newHistory = [cleanMessage, ...history].slice(0, 2);
         messageHistory.set(socket.id, newHistory);
-        socket.to(data.room).emit('chatMessage', data.message);
+
+        // 5. إرسال الرسالة "المفلترة" للطرف الآخر في الغرفة
+        socket.to(data.room).emit('chatMessage', cleanMessage);
     });
 
     // --- "Is Typing" Logic ---
@@ -123,9 +146,7 @@ io.on('connection', (socket) => {
     socket.on('leaveRoom', (room) => {
         socket.leave(room);
         socket.to(room).emit('partnerLeft');
-        const partnerId = Array.from(activeRooms.keys()).find(id => activeRooms.get(id) === room && id !== socket.id);
         activeRooms.delete(socket.id);
-        if (partnerId) activeRooms.delete(partnerId);
     });
 
     socket.on('cancelSearch', () => {
@@ -143,19 +164,15 @@ io.on('connection', (socket) => {
             const formattedSuggestion = `[${timestamp}] - ${sanitizedSuggestion}\n-----------------\n`;
             fs.appendFile('suggestions.txt', formattedSuggestion, (err) => {
                 if (err) { console.error('Failed to save suggestion:', err); }
-                else { console.log(`[+] New suggestion received: "${sanitizedSuggestion}"`); }
             });
         }
     });
 
     // --- Disconnect Logic ---
     socket.on('disconnect', () => {
-        console.log(`[-] User Disconnected: ${socket.id}`);
         const room = activeRooms.get(socket.id);
         if (room) {
             socket.to(room).emit('partnerLeft');
-            const partnerId = Array.from(activeRooms.keys()).find(id => activeRooms.get(id) === room && id !== socket.id);
-            if (partnerId) activeRooms.delete(partnerId);
         }
         activeRooms.delete(socket.id);
 
@@ -166,10 +183,10 @@ io.on('connection', (socket) => {
         
         messageLimiter.delete(socket.id);
         messageHistory.delete(socket.id);
+        io.emit('updateOnlineUsers', io.engine.clientsCount);
     });
 });
 
-// --- Start the Server ---
 server.listen(PORT, () => {
-    console.log(`VoidChat Server is running on http://localhost:${PORT}`);
+    console.log(`VoidChat Server is running on port ${PORT}`);
 });
