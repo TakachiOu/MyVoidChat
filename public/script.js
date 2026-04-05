@@ -40,19 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
             langToggle: 'English',
             siteTitle: 'VoidChat - تحدث مع المجهول',
             mainTitle: 'ادخل الفراغ و تحدث مع المجهول',
-            subtitle: 'شارك اهتماماتك وتحدث مع شخص يشاركك نفس الشغف، ثم اختفِ دون أثر.',
+            subtitle: 'مرحباً بك في VoidChat.. مساحة للبوح وتبادل الأسرار بقلبٍ مطمئن. صُمم هذا الموقع ليكون متنفساً لكل من أثقلته الهموم، لكي يحكي مشاكله لمن لا يعرفه فيرتاح قلبه',
             tagsPlaceholder: 'اكتب tag للدخول إلى دردشة مع من كتب نفس الـtag',
             ctaButton: 'ابحث عن شخص',
             searchingButton: 'جارٍ البحث...',
             aboutTitle: 'ما هو VoidChat؟',
-            aboutText: 'هي منصة بسيطة ومساحة آمنة تتيح لك فرصة الدخول في محادثات نصية، عشوائية، ومجهولة الهوية تماماً مع غرباء يشاركونك نفس الاهتمامات.',
+            aboutText: 'هي منصة بسيطة ومساحة آمنة تتيح لك فرصة الدخول في محادثات نصية، عشوائية، ومجهولة الهوية تماماً .',
             featuresTitle: 'أبرز مميزاتنا',
             feature1: '<strong>هوية مجهولة بالكامل:</strong> لا نطلب أي معلومات شخصية.',
             feature2: '<strong>محادثات سرية:</strong> كل الرسائل تُحذف للأبد بمجرد إنهاء المحادثة.',
             feature3: '<strong>مطابقة ذكية:</strong> استعمل tag إن أحببت، وإن لم تجد أحدًا، غيّره أو ادخل بدون tag.',
             rulesTitle: 'قواعد المنصة',
             rule1: 'التحلي بالاحترام المتبادل وتجنب أي لغة مسيئة.',
-            rule2: 'كل شيئ مسموح في الكلام و المسؤول لا يتحمل مسؤولية أين كان.',
+            rule2: 'لتبقى هذه المساحة نقية، يُمنع منعاً باتاً السب، الشتم، أو استغلال المنصة فيما حرمه الله . اتقِ الله في قولك، فما تكتبه مسجلٌ في صحيفتك',
             rule3: 'استمتع بتجربتك وكن سبباً في جعل تجربة الآخرين ممتعة.',
             suggestionTitle: 'لديك اقتراح لتحسين الموقع؟',
             suggestionText: 'نحن نستمع لآرائكم. شاركنا أفكارك لمساعدتنا على التطور.',
@@ -64,31 +64,33 @@ document.addEventListener('DOMContentLoaded', () => {
             chatPlaceholder: 'اكتب رسالتك...',
             chatSendBtn: 'إرسال',
             statusSearching: 'جارٍ البحث عن غريب',
-            statusMatchFound: 'تم الاتصال بغريب. ابدأ المحادثة!',
+            // الجمل الجديدة للتطابق
+            statusMatchFoundTag: 'تم الاتصال بشريك يشاركك الـ Tag: ',
+            statusMatchFoundRandom: 'تم الاتصال بغريب (لم نجد نفس الـ Tag)',
             partnerTyping: 'شريكك يكتب الآن...',
             partnerLeft: 'لقد غادر الغريب المحادثة.',
             confirmLeaveTitle: 'هل أنت متأكد؟',
             confirmLeaveText: 'هل تريد حقاً مغادرة المحادثة؟',
             confirmYes: 'نعم، غادر',
-            confirmNo: 'لا، ابقَ' // <== تم إصلاح هذا السطر أيضاً
+            confirmNo: 'لا، ابقَ'
         },
         en: {
             langToggle: 'العربية',
             siteTitle: 'VoidChat - Talk with a Stranger',
             mainTitle: 'Enter the Void & Talk with the Unknown',
-            subtitle: 'Share your interests, talk to someone with the same passion, then vanish without a trace.',
+            subtitle: 'Welcome to VoidChat.. A sanctuary for opening up and sharing secrets with peace of mind. This platform was designed to be a vent for those burdened by life\'s worries, allowing you to share your struggles with a stranger and find comfort for your heart.',
             tagsPlaceholder: 'Enter a tag to chat with someone with the same tag',
             ctaButton: 'Find a Stranger',
             searchingButton: 'Searching...',
             aboutTitle: 'What is VoidChat?',
-            aboutText: 'A simple and safe platform that gives you the opportunity to enter into text-based, random, and completely anonymous conversations with strangers who share your interests.',
+            aboutText: 'It is a simple platform and a safe space that allows you to engage in text-based, random, and completely anonymous conversations.',
             featuresTitle: 'Our Top Features',
             feature1: '<strong>Completely Anonymous:</strong> We do not ask for any personal information.',
             feature2: '<strong>Ephemeral Chats:</strong> For absolute privacy, all messages are deleted forever once the conversation ends.',
             feature3: '<strong>Smart Matching:</strong> Use a tag if you like. If you don\'t find anyone, change it or enter without a tag.',
             rulesTitle: 'Platform Rules',
-            rule1: 'Be mutually respectful and avoid any offensive language.',
-            rule2: 'Everything is allowed in conversation, and the admin is not responsible for anything.',
+            rule1: 'Maintain mutual respect and avoid any offensive language',
+            rule2: 'To keep this space safe and pure, any form of profanity, insults, or misuse of this platform for prohibited acts is strictly forbidden. Remember that Allah is watching; every word you speak is recorded in your book of deeds.',
             rule3: 'Enjoy your experience and be a reason for making others\' experience enjoyable.',
             suggestionTitle: 'Have a suggestion to improve the site?',
             suggestionText: 'We listen to your opinions. Share your ideas to help us evolve.',
@@ -100,7 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
             chatPlaceholder: 'Type your message...',
             chatSendBtn: 'Send',
             statusSearching: 'Searching for a stranger',
-            statusMatchFound: 'Connected with a stranger. Start chatting!',
+            // الجمل الجديدة للتطابق
+            statusMatchFoundTag: 'Connected with a partner sharing Tag: ',
+            statusMatchFoundRandom: 'Connected with a stranger (No tag match found)',
             partnerTyping: 'Partner is typing...',
             partnerLeft: 'The stranger has left the conversation.',
             confirmLeaveTitle: 'Are you sure?',
@@ -131,9 +135,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const currentStatusKey = chatStatus.dataset.keyStatus;
-        if (currentStatusKey) {
-            chatStatus.textContent = translations[currentLang][currentStatusKey];
+        // تحديث الرسالة حسب نوع التطابق عند تغيير اللغة
+        const matchType = chatStatus.dataset.matchType;
+        if (matchType === 'tag') {
+            chatStatus.textContent = translations[currentLang].statusMatchFoundTag + chatStatus.dataset.matchedTag;
+        } else if (matchType === 'random') {
+            chatStatus.textContent = translations[currentLang].statusMatchFoundRandom;
+        } else {
+            const currentStatusKey = chatStatus.dataset.keyStatus;
+            if (currentStatusKey && translations[currentLang][currentStatusKey]) {
+                chatStatus.textContent = translations[currentLang][currentStatusKey];
+            }
         }
     }
 
@@ -177,6 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRoom = '';
         chatStatus.textContent = '';
         chatStatus.dataset.keyStatus = '';
+        chatStatus.dataset.matchType = ''; // تنظيف المتغيرات
+        chatStatus.dataset.matchedTag = ''; // تنظيف المتغيرات
     }
 
     // =================================
@@ -212,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tagsInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
-            const newTag = tagsInput.value.trim().toLowerCase();
+            const newTag = tagsInput.value.trim().toLowerCase(); // الحروف تتحول لصغيرة هنا أيضاً
             if (newTag && !tags.has(newTag)) {
                 tags.add(newTag);
                 renderTags();
@@ -288,17 +302,29 @@ document.addEventListener('DOMContentLoaded', () => {
         chatView.classList.remove('hidden');
         chatStatus.textContent = translations[currentLang].statusSearching;
         chatStatus.dataset.keyStatus = 'statusSearching';
+        chatStatus.dataset.matchType = ''; // تنظيف المتغير
         leaveButton.disabled = false;
         startDotAnimation();
     });
 
+    // --- المنطق الجديد عند إيجاد شريك ---
     socket.on('matchFound', (data) => {
         stopDotAnimation();
         currentRoom = data.room;
         mainView.classList.add('hidden');
         chatView.classList.remove('hidden');
-        chatStatus.textContent = translations[currentLang].statusMatchFound;
-        chatStatus.dataset.keyStatus = 'statusMatchFound';
+        
+        // تحديد النص بناءً على نوع التطابق (هل كان بـ Tag أم عشوائي)
+        if (data.matchedTag) {
+            chatStatus.textContent = translations[currentLang].statusMatchFoundTag + data.matchedTag;
+            chatStatus.dataset.matchType = 'tag';
+            chatStatus.dataset.matchedTag = data.matchedTag;
+        } else {
+            chatStatus.textContent = translations[currentLang].statusMatchFoundRandom;
+            chatStatus.dataset.matchType = 'random';
+            chatStatus.dataset.matchedTag = '';
+        }
+
         inputField.disabled = false;
         sendButton.disabled = false;
         leaveButton.disabled = false;
@@ -312,24 +338,28 @@ document.addEventListener('DOMContentLoaded', () => {
         sendButton.disabled = true;
         chatStatus.textContent = translations[currentLang].partnerLeft;
         chatStatus.dataset.keyStatus = 'partnerLeft';
+        chatStatus.dataset.matchType = '';
     });
 
     socket.on('partnerTyping', () => {
         chatStatus.textContent = translations[currentLang].partnerTyping;
-        chatStatus.dataset.keyStatus = 'partnerTyping';
+        // لا نقوم بتحديث الـ dataset هنا لكي يبقى يحتفظ بنوع التطابق إذا غيرنا اللغة أثناء الكتابة
     });
 
     socket.on('partnerStoppedTyping', () => {
-        chatStatus.textContent = translations[currentLang].statusMatchFound;
-        chatStatus.dataset.keyStatus = 'statusMatchFound';
+        // عند التوقف عن الكتابة، نرجع الرسالة الأصلية حسب نوع التطابق
+        if (chatStatus.dataset.matchType === 'tag') {
+            chatStatus.textContent = translations[currentLang].statusMatchFoundTag + chatStatus.dataset.matchedTag;
+        } else if (chatStatus.dataset.matchType === 'random') {
+            chatStatus.textContent = translations[currentLang].statusMatchFoundRandom;
+        }
     });
 
     socket.on('chatMessage', (message) => {
         displayMessage(message, 'stranger-message');
     });
 
-    // ▼▼▼-- تم نقل كود زر الرجوع إلى هنا --▼▼▼
-    // --- Android Back Button Handler (Corrected Version) ---
+    // --- Android Back Button Handler ---
     if (window.Capacitor && Capacitor.isPluginAvailable('App')) {
         const { App } = Capacitor.Plugins;
         App.addListener('backButton', () => {
@@ -345,5 +375,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-
-}); 
+});
