@@ -3,7 +3,7 @@ import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: 'com.company.myvoidchat',
-  appName: 'voidchat',
+  appName: 'Myvoidchat',
   webDir: 'public',
   server: {
     androidScheme: 'https',
