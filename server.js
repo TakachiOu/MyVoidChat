@@ -191,5 +191,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`VoidChat Server is running on port ${PORT}`);
+    console.log(`MyVoidChat Server is running on port ${PORT}`);
 });
