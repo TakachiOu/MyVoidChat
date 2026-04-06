@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Chatchi</string>
+    <string name="title_activity_main">Chatchi</string>
+    <string name="package_name">com.takachi.chatchi</string>
+    <string name="custom_url_scheme">com.takachi.chatchi</string>
+</resources>

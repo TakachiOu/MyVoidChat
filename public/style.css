@@ -21,7 +21,10 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
+    /* مسافة أمان لصفحة البداية */
+    padding-top: env(safe-area-inset-top); 
 }
+
 /* --- Background & Header --- */
 .background-blurs { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
 .blur-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; animation-duration: 20s; animation-iteration-count: infinite; animation-direction: alternate; }
@@ -111,13 +114,37 @@ html[dir="ltr"] .rules-list li::before { right: auto; left: 0; }
     top: 0; 
     left: 0; 
     background-color: var(--bg-color); 
-    z-index: 10; 
+    z-index: 10;
+    /* تهبيط الشات كامل تحت الكاميرا (Notch) */
+    padding-top: env(safe-area-inset-top); 
 }
 
-.chat-container { display: flex; flex-direction: column; width: 100%; max-width: 900px; height: 100%; margin: 0 auto; }
+/* تعديل الحاوية باش تخلي مساحات للإعلانات في الهاتف */
+.chat-container { 
+    display: flex; 
+    flex-direction: column; 
+    width: 90%; /* عرض 90% يخلي 5% فراغ في كل جانب للإعلانات */
+    max-width: 900px; 
+    height: 100%; 
+    margin: 0 auto; 
+    background-color: var(--bg-color);
+    /* حدود باش يبان الشات مفصول عن مساحة الإعلانات */
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
 .chat-status { flex-shrink: 0; padding: 15px; text-align: center; color: var(--text-muted); border-bottom: 1px solid var(--border-color); word-wrap: break-word; }
 .messages-area { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-.chat-input-area { flex-shrink: 0; display: flex; gap: 10px; padding: 15px 20px; border-top: 1px solid var(--border-color); background-color: var(--primary-color); }
+.chat-input-area { 
+    flex-shrink: 0; 
+    display: flex; 
+    gap: 10px; 
+    /* حماية من زر الهوم في الايفون والهواتف الحديثة */
+    padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); 
+    border-top: 1px solid var(--border-color); 
+    background-color: var(--primary-color); 
+}
 .chat-input-area input { flex-grow: 1; min-width: 0; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); padding: 15px; font-size: 1.1rem; text-align: right; }
 html[dir="ltr"] .chat-input-area input { text-align: left; }
 .chat-input-area button { background: var(--accent-color); border: none; color: white; font-weight: bold; border-radius: 10px; padding: 0 30px; cursor: pointer; flex-shrink: 0; }
@@ -174,14 +201,20 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
     .main-title { font-size: clamp(2rem, 8vw, 3rem); line-height: 1.3; }
     .cta-button { padding: 15px 30px; font-size: 1.1rem; width: 100%; }
     .content-block h2 { font-size: 1.8rem; }
+    
+    /* تأكيد الفراغات في التابلت والهواتف */
+    .chat-container { width: 92%; }
 }
 @media (max-width: 480px) {
     .main-title { font-size: clamp(1.6rem, 10vw, 2rem); }
     header { padding: 15px 5%; }
     .logo { font-size: 1.5rem; }
+    
+    /* فراغات أكبر شوية في الهواتف الصغيرة جدا للإعلانات */
+    .chat-container { width: 88%; }
+    
     .chat-input-area { padding: 10px 15px calc(10px + env(safe-area-inset-bottom)); gap: 8px; }
     .chat-input-area input { padding: 12px; font-size: 1rem; }
     .chat-input-area button { padding: 0 15px; font-size: 0.95rem; }
     #leave-button { padding: 0 12px; }
 }
-.chat-input-area { padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
