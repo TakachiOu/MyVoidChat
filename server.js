@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const { Server } = require("socket.io");
 const cors = require('cors');
+const nodemailer = require('nodemailer'); // <-- مكتبة الإيميل زدناها هنا
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,15 @@ const io = new Server(server, {
 });
 
 const PORT = process.env.PORT || 3000;
+
+// --- إعداد Nodemailer لإرسال الاقتراحات للإيميل ---
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // إيميلك (لازم تعمرو في إعدادات Render)
+    pass: process.env.EMAIL_PASS  // كود التطبيق (App Password)
+  }
+});
 
 // --- 1. إعدادات الفلترة والحماية ---
 const forbiddenWords = [
@@ -177,13 +187,23 @@ io.on('connection', (socket) => {
         }
     });
 
-    // الاقتراحات (حفظ في ملف نصي)
+    // --- الاقتراحات (إرسال عبر الإيميل بدلاً من الملف النصي) ---
     socket.on('submitSuggestion', (suggestion) => {
         const sanitized = suggestion.replace(/\s+/g, ' ').trim();
         if (sanitized && sanitized.length < 500) {
-            const entry = `[${new Date().toLocaleString()}] - ${sanitized}\n---\n`;
-            fs.appendFile('suggestions.txt', entry, (err) => {
-                if (err) console.error('Error saving suggestion:', err);
+            const mailOptions = {
+                from: `"Chatchi Feedback" <${process.env.EMAIL_USER}>`,
+                to: process.env.EMAIL_USER,
+                subject: '🚀 اقتراح جديد من Chatchi',
+                text: `يا تاكاشي، وصلك اقتراح جديد من السيت:\n\n"${sanitized}"\n\nالوقت: ${new Date().toLocaleString('ar-DZ')}`
+            };
+
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.error('Email Error:', err);
+                } else {
+                    console.log('Suggestion Email Sent Successfully!');
+                }
             });
         }
     });
