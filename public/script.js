@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const typingTimeout = 1500;
     const tags = new Set();
 
-    // --- قائمة الكلمات الممنوعة (تقدر تزيد فيها واش تحب) ---
+    // --- قائمة الكلمات الممنوعة ---
     const forbiddenWords = [
-    'زب', 'نيك', 'حتشون', 'قحب', 'نقش', 'ترمة', 'سوة','قحبة','بنوتي', 'موجب', 'سالب', 'كس', 
-    'dick', 'fack', 'زك', 'ديوث','شرموطة',
-     'عطاي', 'منيوك', 'شرموط', 'fuck' ];
+        'زب', 'نيك', 'حتشون', 'قحب', 'نقش', 'ترمة', 'سوة','قحبة','بنوتي', 'موجب', 'سالب', 'كس', 
+        'dick', 'fack', 'زك', 'ديوث','شرموطة', 'عطاي', 'منيوك', 'شرموط', 'fuck' 
+    ];
 
     // محددات العناصر
     const mainView = document.getElementById('main-view');
@@ -33,9 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmModal = document.getElementById('confirm-modal');
     const confirmYesBtn = document.getElementById('confirm-yes-btn');
     const confirmNoBtn = document.getElementById('confirm-no-btn');
-    const suggestionTextarea = document.getElementById('suggestion-textarea');
-    const submitSuggestionBtn = document.getElementById('submit-suggestion-btn');
-    const suggestionThanksMsg = document.getElementById('suggestion-thanks');
     const langToggleButton = document.getElementById('lang-toggle');
 
     // =================================
@@ -60,11 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rule1: 'التحلي بالاحترام المتبادل وتجنب أي لغة مسيئة.',
             rule2: 'لتبقى هذه المساحة نقية، يُمنع منعاً باتاً السب، الشتم، أو استغلال المنصة فيما حرمه الله . اتقِ الله في قولك، فما تكتبه مسجلٌ في صحيفتك',
             rule3: 'استمتع بتجربتك وكن سبباً في جعل تجربة الآخرين ممتعة.',
-            suggestionTitle: 'لديك اقتراح لتحسين الموقع؟',
-            suggestionText: 'نحن نستمع لآرائكم. شاركنا أفكارك لمساعدتنا على التطور.',
-            suggestionPlaceholder: 'اكتب اقتراحك هنا...',
-            suggestionBtn: 'إرسال الاقتراح',
-            suggestionThanks: 'شكراً لك! تم إرسال اقتراحك بنجاح.',
             copyright: '© 2026 Chatchi. جميع الحقوق محفوظة.',
             credit: 'صُنع بكل ❤️ بواسطة <a href="" target="_blank" class="credit-link">TaKaChi</a>',
             chatPlaceholder: 'اكتب رسالتك...',
@@ -97,11 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rule1: 'Maintain mutual respect and avoid any offensive language',
             rule2: 'To keep this space safe and pure, any form of profanity, insults, or misuse of this platform for prohibited acts is strictly forbidden. Remember that Allah is watching; every word you speak is recorded in your book of deeds.',
             rule3: 'Enjoy your experience and be a reason for making others\' experience enjoyable.',
-            suggestionTitle: 'Have a suggestion to improve the site?',
-            suggestionText: 'We listen to your opinions. Share your ideas to help us evolve.',
-            suggestionPlaceholder: 'Write your suggestion here...',
-            suggestionBtn: 'Send Suggestion',
-            suggestionThanks: 'Thank you! Your suggestion has been sent successfully.',
             copyright: '© 2026 Chatchi. All rights reserved.',
             credit: 'Made with ❤️ by <a href="" target="_blank" class="credit-link">TaKaChi</a>',
             chatPlaceholder: 'Type your message...',
@@ -152,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // دالة الفلترة لتعويض الكلمات السيئة بالنجوم
     function filterLocalMessage(text) {
         let filteredText = text;
         forbiddenWords.forEach(word => {
@@ -183,13 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function sendMessage() {
         const rawMessage = inputField.value.trim();
         if (rawMessage && currentRoom) {
-            // نرسل الرسالة الأصلية للسيرفر
             socket.emit('chatMessage', { room: currentRoom, message: rawMessage });
-            
-            // نفلتر الرسالة محلياً قبل عرضها للمرسل
             const cleanMessage = filterLocalMessage(rawMessage);
             displayMessage(cleanMessage, 'my-message');
-            
             inputField.value = '';
             inputField.focus();
         }
@@ -298,16 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmModal.classList.add('hidden');
     });
 
-    submitSuggestionBtn.addEventListener('click', () => {
-        const suggestion = suggestionTextarea.value.trim();
-        if (suggestion) {
-            socket.emit('submitSuggestion', suggestion);
-            suggestionTextarea.style.display = 'none';
-            submitSuggestionBtn.style.display = 'none';
-            suggestionThanksMsg.classList.remove('hidden');
-        }
-    });
-
     // =================================
     // 5. مستمعو أحداث الخادم (Socket Events)
     // =================================
@@ -367,7 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('chatMessage', (message) => {
-        // نفلتر الرسالة القادمة من الغريب أيضاً لزيادة الأمان
         const cleanMessage = filterLocalMessage(message);
         displayMessage(cleanMessage, 'stranger-message');
     });
