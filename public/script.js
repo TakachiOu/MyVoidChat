@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================
     // 1. التهيئة والمحددات
     // =================================
-    const socket = io("https://myvoidchat.onrender.com");
+    const socket = io("https://chatchi.onrender.com");
     socket.on('updateOnlineUsers', (count) => {
         const counter = document.getElementById('onlineCount');
         if (counter) counter.textContent = count;
@@ -44,13 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const translations = {
         ar: {
             langToggle: 'English',
-            siteTitle: 'MyVoidChat - تحدث مع المجهول',
+            siteTitle: 'Chatchi - تحدث مع المجهول',
             mainTitle: 'ادخل الفراغ و تحدث مع المجهول',
-            subtitle: 'مرحباً بك في MyVoidChat.. مساحة للبوح وتبادل الأسرار بقلبٍ مطمئن. صُمم هذا الموقع ليكون متنفساً لكل من أثقلته الهموم، لكي يحكي مشاكله لمن لا يعرفه فيرتاح قلبه',
+            subtitle: 'مرحباً بك في Chatchi.. مساحة للبوح وتبادل الأسرار بقلبٍ مطمئن. صُمم هذا الموقع ليكون متنفساً لكل من أثقلته الهموم، لكي يحكي مشاكله لمن لا يعرفه فيرتاح قلبه',
             tagsPlaceholder: 'اكتب tag للدخول إلى دردشة مع من كتب نفس الـtag',
             ctaButton: 'ابحث عن شخص',
             searchingButton: 'جارٍ البحث...',
-            aboutTitle: 'ما هو MyVoidChat؟',
+            aboutTitle: 'ما هو Chatchi؟',
             aboutText: 'هي منصة بسيطة ومساحة آمنة تتيح لك فرصة الدخول في محادثات نصية، عشوائية، ومجهولة الهوية تماماً .',
             featuresTitle: 'أبرز مميزاتنا',
             feature1: '<strong>هوية مجهولة بالكامل:</strong> لا نطلب أي معلومات شخصية.',
@@ -65,8 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestionPlaceholder: 'اكتب اقتراحك هنا...',
             suggestionBtn: 'إرسال الاقتراح',
             suggestionThanks: 'شكراً لك! تم إرسال اقتراحك بنجاح.',
-            copyright: '© 2025 MyVoidChat. جميع الحقوق محفوظة.',
-            credit: 'صُنع بكل ❤️ بواسطة <a href="" target="_blank" class="credit-link">Developer</a>',
+            copyright: '© 2026 Chatchi. جميع الحقوق محفوظة.',
+            credit: 'صُنع بكل ❤️ بواسطة <a href="" target="_blank" class="credit-link">TaKaChi</a>',
             chatPlaceholder: 'اكتب رسالتك...',
             chatSendBtn: 'إرسال',
             statusSearching: 'جارٍ البحث عن غريب',
@@ -81,13 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         en: {
             langToggle: 'العربية',
-            siteTitle: 'MyVoidChat - Talk with a Stranger',
+            siteTitle: 'Chatchi - Talk with a Stranger',
             mainTitle: 'Enter the Void & Talk with the Unknown',
-            subtitle: 'Welcome to MyVoidChat.. A sanctuary for opening up and sharing secrets with peace of mind. This platform was designed to be a vent for those burdened by life\'s worries, allowing you to share your struggles with a stranger and find comfort for your heart.',
+            subtitle: 'Welcome to Chatchi.. A sanctuary for opening up and sharing secrets with peace of mind. This platform was designed to be a vent for those burdened by life\'s worries, allowing you to share your struggles with a stranger and find comfort for your heart.',
             tagsPlaceholder: 'Enter a tag to chat with someone with the same tag',
             ctaButton: 'Find a Stranger',
             searchingButton: 'Searching...',
-            aboutTitle: 'What is MyVoidChat?',
+            aboutTitle: 'What is Chatchi?',
             aboutText: 'It is a simple platform and a safe space that allows you to engage in text-based, random, and completely anonymous conversations.',
             featuresTitle: 'Our Top Features',
             feature1: '<strong>Completely Anonymous:</strong> We do not ask for any personal information.',
@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestionPlaceholder: 'Write your suggestion here...',
             suggestionBtn: 'Send Suggestion',
             suggestionThanks: 'Thank you! Your suggestion has been sent successfully.',
-            copyright: '© 2025 MyVoidChat. All rights reserved.',
-            credit: 'Made with ❤️ by <a href="" target="_blank" class="credit-link">Developer</a>',
+            copyright: '© 2026 Chatchi. All rights reserved.',
+            credit: 'Made with ❤️ by <a href="" target="_blank" class="credit-link">TaKaChi</a>',
             chatPlaceholder: 'Type your message...',
             chatSendBtn: 'Send',
             statusSearching: 'Searching for a stranger',

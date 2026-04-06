@@ -14,6 +14,7 @@ input, textarea, button {
 html, body {
     height: 100%;
     scroll-behavior: smooth;
+    overflow-x: hidden; /* لمنع أي تمرير أفقي يفسد التصميم في الهواتف */
 }
 body {
     font-family: 'Tajawal', sans-serif;
@@ -28,7 +29,7 @@ body {
 #orb2 { width: 300px; height: 300px; background: var(--accent-color); bottom: 5%; right: 10%; animation-name: moveOrb2; }
 @keyframes moveOrb1 { from { transform: translate(0, 0); } to { transform: translate(100px, 50px); } }
 @keyframes moveOrb2 { from { transform: translate(0, 0); } to { transform: translate(-80px, -60px); } }
-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; flex-wrap: wrap; gap: 15px; }
 .logo { font-size: 1.8rem; font-weight: 700; }
 .logo span { color: var(--accent-color); }
 
@@ -52,28 +53,28 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 }
 
 /* --- Main View Content --- */
-#main-view { overflow-y: auto; height: 100%; }
-.container { padding: 0 8%; }
-.hero { text-align: center; padding: 80px 0; }
+#main-view { overflow-y: auto; height: 100%; width: 100%; }
+.container { padding: 0 8%; width: 100%; }
+.hero { text-align: center; padding: 80px 0; width: 100%; }
 .main-title { font-size: 3.5rem; }
-.subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 20px auto 40px; }
-.tags-input-container { background-color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; max-width: 500px; margin: 0 auto 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 20px auto 40px; width: 100%; }
+.tags-input-container { background-color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; max-width: 500px; width: 100%; margin: 0 auto 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .tags-area { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag-item { background-color: var(--accent-color); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; }
-#tags-input { background: none; border: none; outline: none; color: var(--text-color); font-size: 1rem; flex-grow: 1; min-width: 200px; text-align: right; }
+#tags-input { background: none; border: none; outline: none; color: var(--text-color); font-size: 1rem; flex-grow: 1; min-width: 150px; text-align: right; width: 100%; }
 html[dir="ltr"] #tags-input { text-align: left; }
-.cta-button { display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: white; background: var(--accent-color); padding: 20px 45px; border: none; border-radius: 15px; gap: 12px; cursor: pointer; }
+.cta-button { display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: white; background: var(--accent-color); padding: 20px 45px; border: none; border-radius: 15px; gap: 12px; cursor: pointer; max-width: 100%; }
 
 /* --- Text-Based Content Section Styling --- */
-.features-rules-section { padding: 60px 0 80px 0; }
-.text-content-container { max-width: 800px; margin: 0 auto; }
-.content-block { margin-bottom: 50px; }
+.features-rules-section { padding: 60px 0 80px 0; width: 100%; }
+.text-content-container { max-width: 800px; margin: 0 auto; width: 100%; }
+.content-block { margin-bottom: 50px; width: 100%; }
 .content-block:last-child { margin-bottom: 0; }
-.content-block h2 { font-size: 2.2rem; color: white; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--accent-color); }
+.content-block h2 { font-size: 2.2rem; color: white; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--accent-color); word-wrap: break-word; }
 .content-block p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; }
 .features-list, .rules-list { list-style: none; padding-right: 0; }
 html[dir="ltr"] .features-list, html[dir="ltr"] .rules-list { padding-left: 0; }
-.features-list li, .rules-list li { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; padding-right: 35px; position: relative; }
+.features-list li, .rules-list li { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; padding-right: 35px; position: relative; word-wrap: break-word; }
 html[dir="ltr"] .features-list li, html[dir="ltr"] .rules-list li { padding-right: 0; padding-left: 35px; }
 .features-list li::before { content: '✨'; color: var(--accent-color); position: absolute; right: 0; top: 5px; }
 html[dir="ltr"] .features-list li::before { right: auto; left: 0; }
@@ -82,11 +83,11 @@ html[dir="ltr"] .rules-list li::before { right: auto; left: 0; }
 .features-list li strong { color: var(--text-color); }
 
 /* --- Footer & Suggestion Box Styling --- */
-.site-footer { text-align: center; padding: 40px 20px; }
-.suggestion-box { max-width: 600px; margin: 0 auto 40px auto; padding: 30px; background-color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 15px; }
+.site-footer { text-align: center; padding: 40px 20px; width: 100%; overflow: hidden; }
+.suggestion-box { max-width: 600px; width: 100%; margin: 0 auto 40px auto; padding: 30px; background-color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 15px; box-sizing: border-box; }
 .suggestion-box h3 { font-size: 1.5rem; color: white; margin-bottom: 10px; }
 .suggestion-box p { color: var(--text-muted); margin-bottom: 20px; }
-.suggestion-box textarea { width: 100%; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); padding: 15px; font-size: 1rem; resize: vertical; margin-bottom: 15px; text-align: right; }
+.suggestion-box textarea { width: 100%; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); padding: 15px; font-size: 1rem; resize: vertical; margin-bottom: 15px; text-align: right; box-sizing: border-box; }
 html[dir="ltr"] .suggestion-box textarea { text-align: left; }
 #submit-suggestion-btn { width: 100%; padding: 15px; font-size: 1.1rem; font-weight: bold; color: white; background-color: var(--accent-color); border: none; border-radius: 10px; cursor: pointer; }
 #suggestion-thanks { color: #2ecc71; font-weight: bold; }
@@ -97,11 +98,12 @@ html[dir="ltr"] .suggestion-box textarea { text-align: left; }
 /* --- Chat View & Bubbles Styling --- */
 .hidden { display: none !important; }
 
-/* -- v تم التعديل هنا v -- */
+/* -- v تم التعديل هنا ليتناسب مع المتصفحات الحديثة للهواتف v -- */
 #chat-view { 
     display: flex; 
     flex-direction: column; 
-    height: 100vh; /* <-- هذا هو التعديل الأهم */
+    height: 100vh; /* للمتصفحات القديمة */
+    height: 100dvh; /* للمتصفحات الحديثة باش يتجنب شريط العنوان تاع التليفون */
     width: 100%; 
     position: fixed; 
     top: 0; 
@@ -111,63 +113,63 @@ html[dir="ltr"] .suggestion-box textarea { text-align: left; }
 }
 
 .chat-container { display: flex; flex-direction: column; width: 100%; max-width: 900px; height: 100%; margin: 0 auto; }
-.chat-status { flex-shrink: 0; padding: 15px; text-align: center; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+.chat-status { flex-shrink: 0; padding: 15px; text-align: center; color: var(--text-muted); border-bottom: 1px solid var(--border-color); word-wrap: break-word; }
 .messages-area { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
 .chat-input-area { flex-shrink: 0; display: flex; gap: 10px; padding: 15px 20px; border-top: 1px solid var(--border-color); background-color: var(--primary-color); }
-.chat-input-area input { flex-grow: 1; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); padding: 15px; font-size: 1.1rem; text-align: right; }
+.chat-input-area input { flex-grow: 1; min-width: 0; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); padding: 15px; font-size: 1.1rem; text-align: right; }
 html[dir="ltr"] .chat-input-area input { text-align: left; }
-.chat-input-area button { background: var(--accent-color); border: none; color: white; font-weight: bold; border-radius: 10px; padding: 0 30px; cursor: pointer; }
+.chat-input-area button { background: var(--accent-color); border: none; color: white; font-weight: bold; border-radius: 10px; padding: 0 30px; cursor: pointer; flex-shrink: 0; }
 .chat-input-area button:disabled { background-color: #3a3f51; cursor: not-allowed; }
 #leave-button { background-color: #4a5166; font-size: 1.2rem; transition: background-color 0.3s ease; }
 #leave-button:hover:not(:disabled) { background-color: #e74c3c; }
-.message-bubble { padding: 12px 18px; border-radius: 20px; max-width: 75%; line-height: 1.5; word-wrap: break-word; }
+.message-bubble { padding: 12px 18px; border-radius: 20px; max-width: 85%; line-height: 1.5; word-wrap: break-word; }
 .my-message { background-color: var(--accent-color); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
 .stranger-message { background-color: #3a3f51; align-self: flex-start; border-bottom-left-radius: 5px; }
 .system-message { text-align: center; color: var(--text-muted); font-style: italic; font-size: 0.9rem; align-self: center; }
+
 /* --- Innovative Custom Scrollbar Styling --- */
 
 /* هذا الكود يستهدف شريط التمرير في حاوية العرض الرئيسية */
 #main-view::-webkit-scrollbar {
-    width: 12px; /* عرض مناسب للشريط */
+    width: 10px; /* تصغير طفيف ليناسب الهواتف */
 }
 
-/* تصميم خلفية الشريط (المسار) - سنجعلها شبه شفافة */
+/* تصميم خلفية الشريط (المسار) */
 #main-view::-webkit-scrollbar-track {
-    background: rgba(27, 30, 47, 0.3); /* لون داكن وشفاف قليلاً */
+    background: rgba(27, 30, 47, 0.3); 
     border-radius: 10px;
 }
 
-/* تصميم المقبض الذي يتم سحبه - هذا هو الجزء الأهم */
+/* تصميم المقبض */
 #main-view::-webkit-scrollbar-thumb {
-    background: var(--accent-color); /* اللون البنفسجي الأساسي */
+    background: var(--accent-color); 
     border-radius: 10px;
-    border: 3px solid var(--bg-color); /* حد بلون الخلفية ليعطي تأثيراً عائماً واحترافياً */
-    box-shadow: 0 0 10px var(--accent-glow); /* إضافة توهج خفيف حوله */
+    border: 2px solid var(--bg-color); 
+    box-shadow: 0 0 10px var(--accent-color); 
     transition: background-color 0.3s ease;
 }
 
-/* تغيير لون وتوهج المقبض عند مرور الماوس فوقه */
 #main-view::-webkit-scrollbar-thumb:hover {
-    background-color: #a166ff; /* لون أفتح قليلاً */
-    box-shadow: 0 0 15px var(--accent-color); /* توهج أقوى عند التفاعل */
+    background-color: #a166ff; 
+    box-shadow: 0 0 15px var(--accent-color); 
 }
+
 /* --- Custom Scrollbar for Chat Messages Area --- */
 .messages-area::-webkit-scrollbar {
-    width: 12px;
+    width: 8px; /* شريط أنحف داخل الدردشة لمساحة أكبر */
 }
 
 .messages-area::-webkit-scrollbar-track {
-    background: rgba(27, 30, 47, 0.3); /* خلفية شفافة وداكنة */
+    background: rgba(27, 30, 47, 0.3); 
 }
 
 .messages-area::-webkit-scrollbar-thumb {
     background: var(--accent-color);
     border-radius: 10px;
-    border: 3px solid var(--bg-color); /* حد بلون الخلفية ليعطي تأثيراً عائماً */
 }
 
 .messages-area::-webkit-scrollbar-thumb:hover {
-    background-color: #a166ff; /* لون أفتح عند مرور الماوس */
+    background-color: #a166ff; 
 }
 
 
@@ -184,6 +186,7 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
   align-items: center;
   gap: 8px;
   font-family: 'Tajawal', sans-serif;
+  flex-wrap: wrap; /* لضمان التجاوب في الشاشات الصغيرة */
 }
 
 .signature-badge .spark {
@@ -215,6 +218,8 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
     align-items: center;
     z-index: 1000;
     backdrop-filter: blur(5px);
+    padding: 20px; /* لضمان عدم التصاق النافذة بحواف الهاتف */
+    box-sizing: border-box;
 }
 
 .modal-content {
@@ -222,10 +227,11 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
     padding: 25px;
     border-radius: 12px;
     text-align: center;
-    width: 90%;
+    width: 100%;
     max-width: 350px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.4);
     border: 1px solid #4f545c;
+    box-sizing: border-box;
 }
 
 .modal-content h3 {
@@ -280,7 +286,6 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
 /* =================================== */
 
 /* --- حالة التركيز (لتحسين سهولة الوصول) --- */
-/* هذا يضيف إطاراً واضحاً حول الأزرار وحقول الإدخال عند تحديدها بلوحة المفاتيح */
 .cta-button:focus, 
 .lang-toggle-btn:focus,
 #submit-suggestion-btn:focus,
@@ -289,45 +294,53 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
 #suggestion-textarea:focus {
     outline: 3px solid var(--accent-color);
     outline-offset: 3px;
-    border-color: var(--accent-color) !important; /* لتغيير لون الحد أيضاً عند التركيز */
+    border-color: var(--accent-color) !important;
 }
 
 
 /* --- لأجهزة التابلت (الشاشات الأصغر من 992px) --- */
 @media (max-width: 992px) {
     .main-title {
-        font-size: 3rem; /* تصغير العنوان قليلاً */
+        font-size: clamp(2.5rem, 6vw, 3.5rem); /* تتجاوب تلقائيا */
     }
 }
 
 
 /* --- لأجهزة الموبايل (الشاشات الأصغر من 768px) --- */
 @media (max-width: 768px) {
-    /* تقليل الحشو العام للصفحة */
     header, .container {
         padding: 20px 5%; 
     }
 
+    .hero {
+        padding: 50px 0; /* تقليل الفراغ العلوي والسفلي */
+    }
+
     .main-title {
-        font-size: 2.2rem; /* تصغير العنوان بشكل أكبر للهواتف */
+        font-size: clamp(2rem, 8vw, 3rem); 
         line-height: 1.3;
     }
 
     .subtitle {
-        font-size: 1rem; /* تصغير حجم النص الثانوي */
+        font-size: 1.1rem; 
     }
 
     .cta-button {
         padding: 15px 30px;
         font-size: 1.1rem;
+        width: 100%; /* الزر ياخذ العرض كامل في الموبايل */
     }
 
     .content-block h2 {
-        font-size: 1.8rem; /* تصغير عناوين الأقسام */
+        font-size: 1.8rem; 
     }
 
     .features-list li, .rules-list li {
         font-size: 1rem;
+    }
+    
+    .suggestion-box {
+        padding: 20px;
     }
 }
 
@@ -335,28 +348,39 @@ html[dir="ltr"] .chat-input-area input { text-align: left; }
 /* --- للشاشات الصغيرة جداً (أصغر من 480px) --- */
 @media (max-width: 480px) {
     .main-title {
-        font-size: 1.9rem;
+        font-size: clamp(1.6rem, 10vw, 2rem);
     }
     
+    header {
+        padding: 15px 5%;
+    }
+
     .logo {
         font-size: 1.5rem;
     }
     
+    /* تعديل منطقة الكتابة باش ما تخرجش على الشاشة */
     .chat-input-area {
-        padding: 10px; /* تقليل الحشو في منطقة الشات */
+        padding: 10px 15px calc(15px + env(safe-area-inset-bottom)); 
         gap: 8px;
     }
     
     .chat-input-area input {
-        padding: 10px;
+        padding: 12px;
         font-size: 1rem;
     }
 
     .chat-input-area button {
-        padding: 0 20px;
+        padding: 0 15px; /* تصغير الزر باش يخلي مساحة للكتابة */
+        font-size: 0.95rem;
+    }
+
+    #leave-button {
+        padding: 0 12px; /* تصغير أيقونة الخروج قليلا */
     }
 }
 
+/* حل مشكلة الحواف السفلية في بعض هواتف الأيفون والأندرويد */
 .chat-input-area {
     padding-bottom: calc(15px + env(safe-area-inset-bottom));
 }
