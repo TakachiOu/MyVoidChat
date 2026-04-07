@@ -57,7 +57,7 @@ function filterAndSanitize(text) {
 const messageLimiter = new Map();
 const MESSAGE_RATE_LIMIT = 20; // 20 رسالة كحد أقصى
 const MESSAGE_RATE_PERIOD = 60 * 1000; // في الدقيقة الواحدة
-
+const roomMessages = new Map(); // لتخزين الرسائل مؤقتاً لكل غرفة
 const messageHistory = new Map(); // لمنع الـ Spam (إرسال نفس الرسالة)
 const waitingUsers = new Map();  // المستخدمين في قائمة الانتظار (مقسمين حسب الـ Tags)
 const activeRooms = new Map();   // تتبع الغرف النشطة لكل مستخدم
@@ -137,46 +137,68 @@ io.on('connection', (socket) => {
     });
 
     // --- منطق الرسائل (Chat Logic) ---
+// --- منطق الرسائل (Chat Logic) المعدل ---
     socket.on('chatMessage', (data) => {
         if (!data.message || !data.room) return;
-        if (activeRooms.get(socket.id) !== data.room) return; // حماية إضافية للغرف
+        if (activeRooms.get(socket.id) !== data.room) return;
 
         const cleanMessage = filterAndSanitize(data.message);
         if (!cleanMessage) return;
 
-        // منع الـ Spam التكراري
+        // [جديد] تخزين الرسالة في Buffer الغرفة
+        if (!roomMessages.has(data.room)) {
+            roomMessages.set(data.room, []);
+        }
+        const msgs = roomMessages.get(data.room);
+        msgs.push({
+            senderId: socket.id,
+            message: cleanMessage,
+            timestamp: Date.now()
+        });
+        
+        // نحدد عدد الرسائل المخزنة بـ 20 مثلاً باش ما نعمروش الرام بزاف
+        if (msgs.length > 20) msgs.shift(); 
+
+        // بقية الكود تاعك (Rate Limiting و Spam)
         const history = messageHistory.get(socket.id) || [];
         if (cleanMessage === history[0] && cleanMessage === history[1]) return;
 
-        // Rate Limiting (تحديد سرعة الإرسال)
         const now = Date.now();
         const userTimestamps = messageLimiter.get(socket.id) || [];
         const recentTimestamps = userTimestamps.filter(t => now - t < MESSAGE_RATE_PERIOD);
         
-        if (recentTimestamps.length >= MESSAGE_RATE_LIMIT) {
-            return; // تجاهل الرسالة إذا تجاوز الحد
-        }
+        if (recentTimestamps.length >= MESSAGE_RATE_LIMIT) return;
 
         recentTimestamps.push(now);
         messageLimiter.set(socket.id, recentTimestamps);
-
-        // تحديث التاريخ
         messageHistory.set(socket.id, [cleanMessage, ...history].slice(0, 2));
 
-        // إرسال الرسالة للطرف الآخر فقط
+        // إرسال الرسالة للطرف الآخر
         socket.to(data.room).emit('chatMessage', cleanMessage);
+    });
+
+    // [جديد] طلب المزامنة عند العودة من الخلفية
+    socket.on('requestSync', (data) => {
+        const room = activeRooms.get(socket.id);
+        if (room && roomMessages.has(room)) {
+            const allMessages = roomMessages.get(room);
+            // نبعثلو فقط الرسائل اللي هو ما بعثهاش (تاع الطرف الآخر)
+            const missedMessages = allMessages.filter(m => m.senderId !== socket.id);
+            socket.emit('syncMessages', missedMessages);
+        }
     });
 
     // Typing Indicators
     socket.on('userTyping', (data) => socket.to(data.room).emit('partnerTyping'));
     socket.on('userStoppedTyping', (data) => socket.to(data.room).emit('partnerStoppedTyping'));
 
-    // مغادرة الغرفة
+    // مغادرة الغرفة يدوياً
     socket.on('leaveRoom', (room) => {
         socket.leave(room);
-        socket.to(room).emit('partnerLeft');
+        socket.to(room).emit('partnerLeft', { reason: 'manual_leave' });
         activeRooms.delete(socket.id);
         console.log(`[-] User ${socket.id} left room`);
+        roomMessages.delete(room);
     });
 
     // إلغاء البحث
@@ -184,6 +206,14 @@ io.on('connection', (socket) => {
         for (const [tag, users] of waitingUsers.entries()) {
             const index = users.indexOf(socket.id);
             if (index > -1) users.splice(index, 1);
+        }
+    });
+
+    // تتبع حالة التطبيق (Backround/Foreground) - حل المشكلة الثانية
+    socket.on('updateAppState', (data) => {
+        const room = activeRooms.get(socket.id);
+        if (room) {
+            socket.to(room).emit('partnerAppStateChanged', { state: data.state });
         }
     });
 
@@ -208,11 +238,12 @@ io.on('connection', (socket) => {
         }
     });
 
-    // عند انقطاع الاتصال
+    // عند انقطاع الاتصال المفاجئ
     socket.on('disconnect', () => {
         const room = activeRooms.get(socket.id);
         if (room) {
-            socket.to(room).emit('partnerLeft');
+            socket.to(room).emit('partnerLeft', { reason: 'sudden_disconnect' });
+            roomMessages.delete(room);
         }
         activeRooms.delete(socket.id);
 

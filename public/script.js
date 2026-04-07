@@ -36,14 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const langToggleButton = document.getElementById('lang-toggle');
 
     // =================================
-    // 2. قاموس الترجمة
+    // 2. قاموس الترجمة (تمت إضافة مفاتيح جديدة)
     // =================================
     const translations = {
         ar: {
             langToggle: 'English',
             siteTitle: 'Chatchi - تحدث مع المجهول',
             mainTitle: 'ادخل الفراغ و تحدث مع المجهول',
-            subtitle: 'مرحباً بك في Chatchi.. مساحة للبوح وتبادل الأسرار بقلبٍ مطمئن. صُمم هذا الموقع ليكون متنفساً لكل من أثقلته الهموم، لكي يحكي مشاكله لمن لا يعرفه فيرتاح قلبه',
+            subtitle: 'مرحباً بك في Chatchi.. مساحة للبوح وتبادل الأسرار بقلبٍ مطمئن.',
             tagsPlaceholder: 'اكتب tag للدخول إلى دردشة مع من كتب نفس الـtag',
             ctaButton: 'ابحث عن شخص',
             searchingButton: 'جارٍ البحث...',
@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
             featuresTitle: 'أبرز مميزاتنا',
             feature1: '<strong>هوية مجهولة بالكامل:</strong> لا نطلب أي معلومات شخصية.',
             feature2: '<strong>محادثات سرية:</strong> كل الرسائل تُحذف للأبد بمجرد إنهاء المحادثة.',
-            feature3: '<strong>مطابقة ذكية:</strong> استعمل tag إن أحببت، وإن لم تجد أحدًا، غيّره أو ادخل بدون tag.',
+            feature3: '<strong>مطابقة ذكية:</strong> استعمل tag إن أحببت.',
             rulesTitle: 'قواعد المنصة',
-            rule1: 'التحلي بالاحترام المتبادل وتجنب أي لغة مسيئة.',
-            rule2: 'لتبقى هذه المساحة نقية، يُمنع منعاً باتاً السب، الشتم، أو استغلال المنصة فيما حرمه الله . اتقِ الله في قولك، فما تكتبه مسجلٌ في صحيفتك',
+            rule1: 'لضمان تواصلٍ ممتع ومستمر، يُرجى البقاء في غرفة الدردشة وعدم مغادرتها حتى لا تنقطع المحادثة بين الطرفين.',
+            rule2: 'اتقِ الله في قولك، فما تكتبه مسجلٌ في صحيفتك',
             rule3: 'استمتع بتجربتك وكن سبباً في جعل تجربة الآخرين ممتعة.',
             copyright: '© 2026 Chatchi. جميع الحقوق محفوظة.',
             credit: 'صُنع بكل ❤️ بواسطة <a href="" target="_blank" class="credit-link">TaKaChi</a>',
@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
             statusMatchFoundRandom: 'تم الاتصال بغريب (لم نجد نفس الـ Tag)',
             partnerTyping: 'شريكك يكتب الآن...',
             partnerLeft: 'لقد غادر الغريب المحادثة.',
+            partnerSuddenLeft: 'انقطع الاتصال مع الغريب فجأة.',
+            partnerAway: 'الشريك في الخلفية (Away)',
             confirmLeaveTitle: 'هل أنت متأكد؟',
             confirmLeaveText: 'هل تريد حقاً مغادرة المحادثة؟',
             confirmYes: 'نعم، غادر',
@@ -75,29 +77,31 @@ document.addEventListener('DOMContentLoaded', () => {
             langToggle: 'العربية',
             siteTitle: 'Chatchi - Talk with a Stranger',
             mainTitle: 'Enter the Void & Talk with the Unknown',
-            subtitle: 'Welcome to Chatchi.. A sanctuary for opening up and sharing secrets with peace of mind. This platform was designed to be a vent for those burdened by life\'s worries, allowing you to share your struggles with a stranger and find comfort for your heart.',
+            subtitle: 'Welcome to Chatchi.. A sanctuary for opening up and sharing secrets.',
             tagsPlaceholder: 'Enter a tag to chat with someone with the same tag',
             ctaButton: 'Find a Stranger',
             searchingButton: 'Searching...',
             aboutTitle: 'What is Chatchi?',
-            aboutText: 'It is a simple platform and a safe space that allows you to engage in text-based, random, and completely anonymous conversations.',
+            aboutText: 'It is a simple platform and a safe space for anonymous conversations.',
             featuresTitle: 'Our Top Features',
-            feature1: '<strong>Completely Anonymous:</strong> We do not ask for any personal information.',
-            feature2: '<strong>Ephemeral Chats:</strong> For absolute privacy, all messages are deleted forever once the conversation ends.',
-            feature3: '<strong>Smart Matching:</strong> Use a tag if you like. If you don\'t find anyone, change it or enter without a tag.',
+            feature1: '<strong>Completely Anonymous:</strong> No personal info required.',
+            feature2: '<strong>Ephemeral Chats:</strong> Messages are deleted forever.',
+            feature3: '<strong>Smart Matching:</strong> Use tags or go random.',
             rulesTitle: 'Platform Rules',
-            rule1: 'Maintain mutual respect and avoid any offensive language',
-            rule2: 'To keep this space safe and pure, any form of profanity, insults, or misuse of this platform for prohibited acts is strictly forbidden. Remember that Allah is watching; every word you speak is recorded in your book of deeds.',
-            rule3: 'Enjoy your experience and be a reason for making others\' experience enjoyable.',
+            rule1: 'To ensure an enjoyable and continuous conversation, please remain in the chat room and do not leave, so the conversation does not get interrupted between both parties.',
+            rule2: 'No profanity allowed. Every word is recorded in your deeds.',
+            rule3: 'Enjoy and be kind.',
             copyright: '© 2026 Chatchi. All rights reserved.',
             credit: 'Made with ❤️ by <a href="" target="_blank" class="credit-link">TaKaChi</a>',
             chatPlaceholder: 'Type your message...',
             chatSendBtn: 'Send',
             statusSearching: 'Searching for a stranger',
             statusMatchFoundTag: 'Connected with a partner sharing Tag: ',
-            statusMatchFoundRandom: 'Connected with a stranger (No tag match found)',
+            statusMatchFoundRandom: 'Connected with a stranger',
             partnerTyping: 'Partner is typing...',
             partnerLeft: 'The stranger has left the conversation.',
+            partnerSuddenLeft: 'Stranger lost connection suddenly.',
+            partnerAway: 'Partner is away (Background)',
             confirmLeaveTitle: 'Are you sure?',
             confirmLeaveText: 'Do you really want to leave the conversation?',
             confirmYes: 'Yes, Leave',
@@ -126,6 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // تحديث حالة الشات بناءً على اللغة
+        updateChatStatusUI();
+    }
+
+    function updateChatStatusUI() {
         const matchType = chatStatus.dataset.matchType;
         if (matchType === 'tag') {
             chatStatus.textContent = translations[currentLang].statusMatchFoundTag + chatStatus.dataset.matchedTag;
@@ -316,14 +325,26 @@ document.addEventListener('DOMContentLoaded', () => {
         inputField.focus();
     });
 
-    socket.on('partnerLeft', () => {
+    // معالجة مغادرة الطرف الآخر (عادية أو مفاجئة)
+    socket.on('partnerLeft', (data) => {
         stopDotAnimation();
-        displayMessage(translations[currentLang].partnerLeft, 'system-message');
+        const reasonKey = (data && data.reason === 'sudden_disconnect') ? 'partnerSuddenLeft' : 'partnerLeft';
+        displayMessage(translations[currentLang][reasonKey], 'system-message');
+        
         inputField.disabled = true;
         sendButton.disabled = true;
-        chatStatus.textContent = translations[currentLang].partnerLeft;
-        chatStatus.dataset.keyStatus = 'partnerLeft';
+        chatStatus.textContent = translations[currentLang][reasonKey];
+        chatStatus.dataset.keyStatus = reasonKey;
         chatStatus.dataset.matchType = '';
+    });
+
+    // معالجة دخول الشريك للخلفية
+    socket.on('partnerAppStateChanged', (state) => {
+        if (state === 'inactive') {
+            chatStatus.textContent = translations[currentLang].partnerAway;
+        } else {
+            updateChatStatusUI(); // العودة للحالة الأصلية (التاغ أو عشوائي)
+        }
     });
 
     socket.on('partnerTyping', () => {
@@ -331,11 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('partnerStoppedTyping', () => {
-        if (chatStatus.dataset.matchType === 'tag') {
-            chatStatus.textContent = translations[currentLang].statusMatchFoundTag + chatStatus.dataset.matchedTag;
-        } else if (chatStatus.dataset.matchType === 'random') {
-            chatStatus.textContent = translations[currentLang].statusMatchFoundRandom;
-        }
+        updateChatStatusUI();
     });
 
     socket.on('chatMessage', (message) => {
@@ -343,8 +360,21 @@ document.addEventListener('DOMContentLoaded', () => {
         displayMessage(cleanMessage, 'stranger-message');
     });
 
-    if (window.Capacitor && Capacitor.isPluginAvailable('App')) {
+    socket.on('syncMessages', (messages) => {
+        messages.forEach(msg => {
+            // نفلترو الرسالة ونعرضوها كأنها رسالة غريب
+            const cleanMessage = filterLocalMessage(msg.message);
+            displayMessage(cleanMessage, 'stranger-message');
+        });
+    });
+
+    // =================================
+    // 6. تكامل Capacitor (أهم جزء)
+    // =================================
+    if (window.Capacitor) {
         const { App } = Capacitor.Plugins;
+
+        // مستمع لزر الرجوع
         App.addListener('backButton', () => {
             const isModalVisible = !confirmModal.classList.contains('hidden');
             const isChatViewVisible = !chatView.classList.contains('hidden');
@@ -356,5 +386,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 App.exitApp();
             }
         });
-    }
+
+        // مستمع لحالة التطبيق (Background/Foreground) - الحل رقم 2
+App.addListener('appStateChange', ({ isActive }) => {
+            if (currentRoom) {
+                socket.emit('updateAppState', { state: isActive ? 'active' : 'inactive' });
+                if (isActive) {
+                    socket.emit('requestSync');
+                } 
+            } 
+        }); 
+    } 
 });
